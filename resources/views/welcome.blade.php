@@ -33,62 +33,106 @@
                 <a href="#">
                     <img src="{{asset('assets/images/drap.png')}}" alt="CI" class="flag">
                     <span>CI <span class="globe"></span></span>
-
                 </a>
+                <!-- Menu flottant -->
+                <div class="flag-dropdown" id="flagMenu">
+                    <h4>Sélectionnez un pays</h4>
+                    <p>Choisissez votre pays pour personnaliser l’expérience Afriba.</p>
+
+                    <!-- Sélection pays -->
+                    <label>Pays</label>
+                    <div class="custom-select">
+                        <div class="selected">
+                            <img src="https://flagcdn.com/w20/ci.png" alt="">
+                            <span class="text">Côte d’Ivoire</span>
+                            <span class="arrow"></span>
+                        </div>
+
+                        <div class="options">
+                            <div data-value="ci"><img src="https://flagcdn.com/w20/ci.png" alt=""> Côte d’Ivoire</div>
+                            <div data-value="sn"><img src="https://flagcdn.com/w20/sn.png" alt=""> Sénégal</div>
+                            <div data-value="ml"><img src="https://flagcdn.com/w20/ml.png" alt=""> Mali</div>
+                            <div data-value="bj"><img src="https://flagcdn.com/w20/bj.png" alt=""> Bénin</div>
+                        </div>
+                    </div>
+
+                    <!-- Sélection Langue -->
+                    <label>Langue</label>
+                    <div class="custom-select" data-type="langue">
+                        <div class="selected" role="button" aria-expanded="false">
+                            <span class="text">Français</span>
+                            <span class="arrow" aria-hidden="true"></span>
+                        </div>
+                        <div class="options" role="listbox">
+                            <div class="option" data-value="fr" role="option"><span>Français</span></div>
+                            <div class="option" data-value="en" role="option"><span>Anglais</span></div>
+                            <div class="option" data-value="ar" role="option"><span>Arabe</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Sélection Devise -->
+                    <label>Devise</label>
+                    <div class="custom-select" data-type="devise">
+                        <div class="selected" role="button" aria-expanded="false">
+                            <span class="text">XOF - Franc CFA</span>
+                            <span class="arrow" aria-hidden="true"></span>
+                        </div>
+                        <div class="options" role="listbox">
+                            <div class="option" data-value="xof" role="option"><span>XOF - Franc CFA</span></div>
+                            <div class="option" data-value="eur" role="option"><span>EUR - Euro</span></div>
+                            <div class="option" data-value="usd" role="option"><span>USD - Dollar US</span></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-orange">🌍 Sauvegarder</button>
+                </div>
             </div>
 
-            <!-- Menu flottant -->
-            <div class="flag-dropdown" id="flagMenu">
-                <h4>Sélectionnez un pays</h4>
-                <p>Choisissez votre pays pour personnaliser l’expérience Afriba.</p>
-
-                <!-- Sélection pays -->
-                <label>Pays</label>
-                <div class="custom-select">
-                    <div class="selected">
-                        <img src="https://flagcdn.com/w20/ci.png" alt="">
-                        <span class="text">Côte d’Ivoire</span>
-                        <span class="arrow"></span>
-                    </div>
-
-                    <div class="options">
-                        <div data-value="ci"><img src="https://flagcdn.com/w20/ci.png" alt=""> Côte d’Ivoire</div>
-                        <div data-value="sn"><img src="https://flagcdn.com/w20/sn.png" alt=""> Sénégal</div>
-                        <div data-value="ml"><img src="https://flagcdn.com/w20/ml.png" alt=""> Mali</div>
-                        <div data-value="bj"><img src="https://flagcdn.com/w20/bj.png" alt=""> Bénin</div>
-                    </div>
-                </div>
-
-                <!-- Sélection langue -->
-                <label>Langue</label>
-                <div class="custom-select" data-type="langue">
-                    <div class="selected" role="button" aria-expanded="false">
-                        <span class="text">Français</span>
-                        <span class="arrow" aria-hidden="true"></span>
-                    </div>
-                    <div class="options" role="listbox">
-                        <div class="option" data-value="fr" role="option"><span>Français</span></div>
-                        <div class="option" data-value="en" role="option"><span>Anglais</span></div>
-                        <div class="option" data-value="ar" role="option"><span>Arabe</span></div>
-                    </div>
-                </div>
-
-                <!-- Sélection devise -->
-                <label>Devise</label>
-                <div class="custom-select" data-type="devise">
-                    <div class="selected" role="button" aria-expanded="false">
-                        <span class="text">XOF - Franc CFA</span>
-                        <span class="arrow" aria-hidden="true"></span>
-                    </div>
-                    <div class="options" role="listbox">
-                        <div class="option" data-value="xof" role="option"><span>XOF - Franc CFA</span></div>
-                        <div class="option" data-value="eur" role="option"><span>EUR - Euro</span></div>
-                        <div class="option" data-value="usd" role="option"><span>USD - Dollar US</span></div>
-                    </div>
-                </div>
-
-                <button class="btn-orange">🌍 Sauvegarder</button>
-            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Ouvrir/fermer le menu drapeau
+                    const headerFlag = document.getElementById("flagToggle");
+                    headerFlag.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        headerFlag.classList.toggle("open");
+                    });
+                    document.addEventListener("click", function(e) {
+                        if (!headerFlag.contains(e.target)) {
+                            headerFlag.classList.remove("open");
+                        }
+                    });
+                    // Dropdown pour chaque custom-select
+                    document.querySelectorAll(".custom-select").forEach(select => {
+                        const selected = select.querySelector(".selected");
+                        const options = select.querySelector(".options");
+                        // Toggle open au clic sur la zone selected
+                        selected.addEventListener("click", e => {
+                            e.stopPropagation(); // éviter propagation au document
+                            // fermer les autres selects
+                            document.querySelectorAll(".custom-select").forEach(s => {
+                                if (s !== select) s.classList.remove("open");
+                            });
+                            select.classList.toggle("open");
+                        });
+                        // Cliquer sur une option
+                        options.querySelectorAll(".option").forEach(opt => {
+                            opt.addEventListener("click", e => {
+                                e.stopPropagation();
+                                const text = opt.querySelector("span") ? opt
+                                    .querySelector("span").textContent : opt
+                                    .textContent;
+                                select.querySelector(".text").textContent = text.trim();
+                                select.classList.remove("open");
+                            });
+                        });
+                    });
+                    // Fermer tous les selects si clic extérieur
+                    document.addEventListener("click", () => {
+                        document.querySelectorAll(".custom-select").forEach(s => s.classList.remove(
+                            "open"));
+                    });
+                });
+            </script>
 
             <!-- Barre de recherche -->
 
@@ -224,29 +268,75 @@
                     <a href="/messages" class="see-all">Voir toutes les conversations</a>
                 </div>
 
-                <!-- Icône panier -->
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        function setupDropdown(toggleId, menuId) {
+                            const toggle = document.getElementById(toggleId);
+                            const menu = document.getElementById(menuId);
+                            toggle.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                // Si un menu est déjà ouvert et ce n'est pas celui-ci, on bloque le clic
+                                const anyOpen = document.querySelector('.dropdown-menu.show');
+                                if (anyOpen && anyOpen !== menu) {
+                                    return; // bloque l'ouverture d'un autre menu
+                                }
+                                // Afficher/masquer le menu actuel
+                                menu.classList.toggle('show');
+                            });
+                            menu.addEventListener('click', (e) => e.stopPropagation());
+                        }
+                        // Configuration des menus
+                        setupDropdown('deliveryToggle', 'deliveryMenu');
+                        setupDropdown('messageToggle', 'messageMenu');
+                        setupDropdown('notificationToggle', 'notificationMenu');
+                        setupDropdown('orderListToggle', 'orderListMenu');
+                        setupDropdown('cartToggle', 'cartMenu');
+                        setupDropdown('connexionToggle', 'connexionMenu');
+                        // Clic en dehors ferme tous les menus
+                        document.addEventListener('click', () => {
+                            document.querySelectorAll('.dropdown-menu.show').forEach(m => m.classList
+                                .remove('show'));
+                        });
+                    });
+                </script>
 
-                <div class="header-option" id="cartToggle">
+                <!-- Menu flottant panier -->
+                <!-- Icône panier unique -->
+                <div class="header-option" id="cartToggle" style="position: relative; cursor: pointer;">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" width="22" height="22">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 
-         1.087.835l.383 1.437M7.5 
-         14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218
-         c1.121-2.3 2.1-4.684 2.924-7.138
-         a60.114 60.114 0 0 0-16.536-1.84
-         M7.5 14.25 5.106 5.272M6 20.25a.75.75 
-         0 1 1-1.5 0 .75.75 0 0 1 
-         1.5 0Zm12.75 0a.75.75 0 1 1-1.5 
-         0 .75.75 0 0 1 1.5 0Z" />
+             1.087.835l.383 1.437M7.5 
+             14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218
+             c1.121-2.3 2.1-4.684 2.924-7.138
+             a60.114 60.114 0 0 0-16.536-1.84
+             M7.5 14.25 5.106 5.272M6 20.25a.75.75 
+             0 1 1-1.5 0 .75.75 0 0 1 
+             1.5 0Zm12.75 0a.75.75 0 1 1-1.5 
+             0 .75.75 0 0 1 1.5 0Z" />
                     </svg>
+                    <span class="cart-badge" id="cartBadge" style="display:none;">0</span>
                 </div>
-
-                <!-- Menu flottant panier -->
-                <div class="cart-dropdown" id="cartMenu">
-                    <h4>Votre panier</h4>
-                    <p>Vous n'avez aucun article dans votre panier.</p>
-                    <a href="/panier" class="btn-orange">Voir mon panier</a>
-                </div>
+                <script>
+                    const cartToggle = document.getElementById('cartToggle');
+                    const cartBadge = document.getElementById('cartBadge');
+                    // Redirection au panier
+                    cartToggle.addEventListener('click', function() {
+                        window.location.href = '/panier';
+                    });
+                    // Fonction pour mettre à jour le badge
+                    function updateCartBadge(count) {
+                        if (count > 0) {
+                            cartBadge.style.display = 'block'; // affiche le badge
+                            cartBadge.textContent = count;
+                        } else {
+                            cartBadge.style.display = 'none'; // masque le badge si 0
+                        }
+                    }
+                    // Exemple : ajouter un article
+                    // updateCartBadge(1); // badge affichera "1"
+                    // updateCartBadge(0); // badge disparaît
+                </script>
 
                 <div class="header-option" id="notificationToggle" style="position: relative; cursor: pointer;">
                     <!-- Icône de notification -->
@@ -309,6 +399,28 @@
                     </div>
 
                 </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const connexionToggle = document.getElementById("connexionToggle");
+                        const connexionMenu = document.querySelector(".connexion-dropdown");
+                        // Toggle menu
+                        connexionToggle.addEventListener("click", function(e) {
+                            e.stopPropagation();
+                            // Fermer les autres dropdowns
+                            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                                if (menu !== connexionMenu) menu.classList.remove('show');
+                            });
+                            // Afficher/masquer le menu Connexion
+                            connexionMenu.classList.toggle('show');
+                        });
+                        // Empêche fermeture si clic dans le menu
+                        connexionMenu.addEventListener("click", e => e.stopPropagation());
+                        // Fermer menu si clic en dehors
+                        document.addEventListener("click", () => {
+                            connexionMenu.classList.remove("show");
+                        });
+                    });
+                </script>
 
             </div>
         </div>
@@ -359,6 +471,25 @@
             </p>
 
             <a href="#shop" class="btn-hero">Découvrir Afriba</a>
+            <script>
+document.addEventListener("DOMContentLoaded", function() {
+  const btn = document.querySelector('.btn-hero');
+  btn.addEventListener('click', function(e) {
+    e.preventDefault(); // empêche le lien #shop de sauter brutalement
+
+    // on cible le premier produit de la liste
+    const firstProduct = document.querySelector('.trend-card');
+    if (firstProduct) {
+      const position = firstProduct.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({
+        top: position,
+        behavior: 'smooth'
+      });
+    }
+  });
+});
+</script>
+
 
             <div class="hero-stats-simple">
                 <div class="stat">
@@ -443,6 +574,44 @@
             <i class="fas fa-angle-double-up"></i>
         </div>
     </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const scrollBtn = document.querySelector('.afribar-item[title="Remonter en haut"]');
+    const categorieSection = document.querySelector('.categorie-section');
+
+    if (!scrollBtn || !categorieSection) return; // sécurité
+
+    const sectionTop = categorieSection.offsetTop;
+
+    // Fonction pour montrer ou cacher le bouton
+    function toggleButton() {
+        if (window.scrollY > sectionTop) {
+            scrollBtn.style.display = 'flex';
+        } else {
+            scrollBtn.style.display = 'none';
+        }
+    }
+
+    // Vérifier la position au scroll
+    window.addEventListener('scroll', toggleButton);
+
+    // Vérifier dès le chargement (utile après refresh)
+    toggleButton();
+
+    // Cliquer sur le bouton = remonter juste au-dessus de la section
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: sectionTop - 100, // ajuste la marge avant le haut
+            behavior: 'smooth'
+        });
+    });
+
+    // Le bouton est caché au départ
+    scrollBtn.style.display = 'none';
+});
+</script>
+
+
 
     <!-- 🛍 Section Offres -->
     <section class="offre-section">
@@ -535,16 +704,21 @@
 
     <!-- interface article -->
     <section class="afrimarket-social-trends">
-
         <div class="trend-containe">
-
             <div class="trend-card">
                 <a href="#">
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
                     </div>
+                    <div class="fav-btn">♡</div>
+
+                    <!-- Image principale -->
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyd9jzlxWx-wNjLWtTIcDDdX3-8tRQ61Efpg&s"
-                        alt="T-shirt Nommade" />
+                        alt="T-shirt Nommade" class="primary">
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW_GZkaBf95FQthIuO_oFH6T0eRsgjNav_Ba0I9YmkjZ8U0DU55wbwmPEwhjXd179F5l4&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -580,8 +754,13 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
                     </div>
-                    <img src="https://www.labaleineacabosse.com/wp-content/uploads/2017/12/Feves-torrefiees-Nouveau-packaging.jpg"
-                        alt="Cacao brut" />
+                    <div class="fav-btn">♡</div>
+                    <img src="https://sanlishop.ci/8993-home_default/croustilles-de-feves-de-cacao-125g.jpg"
+                        alt="Cacao brut" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://sanlishop.ci/8990-large_default/croustilles-de-feves-de-cacao-250g.jpg"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -617,8 +796,13 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/et.png" alt="ET" />
                     </div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvuSUbWpJ9id5jg9l_fe87qIWKjG_AvGsbBQ&s"
-                        alt="Café éthiopien" />
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx6aTZL2zdenMwGGS_L02DDCt9rISs8A4yqBvSulM50kuROTvBjewPdj2Yqf3x7EtVdbc&usqp=CAU"
+                        alt="Café éthiopien" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://www.lecafeier.fr/wp-content/uploads/2022/03/cafe_pureoriginebio_ethiopie_moka_jebena_buna.jpg"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -654,8 +838,13 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/gh.png" alt="GH" />
                     </div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRL8Qt17BLJ2k8C87ATEFhgKajSCBlYSeBgLg&s"
-                        alt="Tissu wax africain" />
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShpFpVGkW-nL-rEtGvxGF9ZMDnCnWNhFSlSCA4moWStPmjit30yC7-jDE0-RhVjNJ_8oY&usqp=CAU"
+                        alt="Tissu wax africain" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFwkidb2fny4Nqu8JRhynOuQNn91m8N2XOz9LChvlwgjqlab5FIONOtMABgCEEXyKZyEI&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -691,8 +880,13 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
                     </div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzSLePQLW_2t_bGF6_j0JcCEAaR8inIB1svA&s"
-                        alt="Attiéké ivoirien" />
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHXOxIWkuf4FCC8IzW1klPZEzkMSn1nrSXWnXGe93gy_-EMuO1sDzqqj4-Q7wp5krtix4&usqp=CAU"
+                        alt="Attiéké ivoirien" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNYaDITXC2q3GGT-7AIim8t0F_3F7HxKC3-TtttecQHtnyqHWdWjnvWgSofKBD5-bY0Y8&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -728,8 +922,13 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
                     </div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqgjyVMzTBn0JyE1kQQiaF503gpMH1WpEhyUFPOho0ZWK8lV-9mcS37eiIdtMmk9gKsAU&usqp=CAU"
-                        alt="Riz ivoirien" />
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwANXN5rOnLb_XF7XEu2k6JnaWsi3CLtGIdcOWTTON4LvcHSQTaNp0YcxFtT4kzgf_lP0&usqp=CAU"
+                        alt="Riz ivoirien" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4TjDuYkvlg0IYM2tXnkbewc8X4DLs09cB_XlJVm4PgZA8iTaCNskU3Myz97WFXMbrt54&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -765,8 +964,13 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
                     </div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyaYRgMEJ50-wbyxjovs7C9KnLTzHEN_Jz9g&s"
-                        alt="Huile de palme rouge" />
+                    <div class="fav-btn">♡</div>
+                    <img src="https://grandexotique.com/cdn/shop/files/IMG_6790.heic?v=1749022466&width=1946"
+                        alt="Huile de palme rouge" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZEYhvwapVJQfcjnz5XFZq3syouD451qPEpWrhP5EagGds2xJzMkhDpX9ipn6HrH5Lh-g&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -802,8 +1006,13 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
                     </div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR58gjSM-YUfid5GH84oaqF1XYfarXSu3tLPO3Un707BXrCNq-O8DRdRzb5d_c3GeLBRxs&usqp=CAU"
-                        alt="Noix de cajou" />
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8TCe5urX_opitXGeBcQgSu6PR6Gvfo_rkvALbLg-ImKBDJNxA2XPkcs_PyhC8Ni7vgRs&usqp=CAU"
+                        alt="Noix de cajou" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB9pLE-Mgu1X54gNUyHKqNkXdSZGDxQQ6L8V0NCJxYc7h-G2Py1vIBvkPYK3tncRdwV70&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -839,8 +1048,13 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
                     </div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgh1OSMXWBeh_HrtAhKXjIZDDiR7GusZkanOTKEcbmZHDAzPI0AS7SdOMTT1IY-9h_GTQ&usqp=CAU"
-                        alt="Poudre de cacao" />
+                    <div class="fav-btn">♡</div>
+                    <img src="https://s5q3y8p7.delivery.rocketcdn.me/wp-content/uploads/2018/12/00288-cacao-pur-en-poudre-bio-le-kilo-300x300.jpg"
+                        alt="Poudre de cacao" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://saldac.com/wp-content/uploads/2018/12/00289-cacao-sucre-en-poudre-bio-le-kilo-1200x900.jpg"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -876,8 +1090,14 @@
                     <div class="country-icon">
                         <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
                     </div>
+                    <div class="fav-btn">♡</div>
+
                     <img src="https://image.made-in-china.com/202f0j00VRGUeHSgIhzp/Super-Quality-Mesh-Bag-Packing-Chinese-Yellow-Whole-Fresh-Ginger.webp"
-                        alt="Gingembre ivoirien" />
+                        alt="Gingembre ivoirien" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://image.made-in-china.com/2f0j00QvfiDKgCIIUa/New-Crop-Fresh-Ginger-for-Sale-Ginger-Root-Superior-Quality-From-China.webp"
+                        alt="T-shirt vue arrière" class="secondary">
 
                     <div class="product-info">
                         <div class="product-details">
@@ -908,15 +1128,82 @@
                 </a>
             </div>
 
+          
+
+            
+
+             <div class="grid-container">
+
+                <div class="product-card">
+                    <img src="https://hdmag.net/wp-content/uploads/2019/03/okha-mobilier-design.jpg" alt="Puzzle"
+                        class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>1 400 FCFA <s class="old-price">5 600
+                            FCFA</s></span>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://kaolackcreations.com/wp-content/uploads/2023/11/bracelet-africain-3-metaux-lamou-ndiaxass-3.jpg"
+                        alt="Lip Balms Tray" class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>2 600 FCFA <s class="old-price">6 500
+                            FCFA</s></span>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://images.hbjo-online.com/webp/sites/constant/uploads/images/687661b517d7e67409df487fb9_ashanti.png"
+                        alt="Cards" class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>2 240 FCFA <s class="old-price">4 480
+                            FCFA</s></span>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpgGPZRihx61SvLToPaNYRh7t_UVF_9CT6_Q&s"
+                        alt="Scrub" class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>6 470 FCFA</span>
+                    <span class="video-indicator">▶</span>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://cdn.prod.website-files.com/6258429f68ebead7665d57ed/626c04305c81c0800f8ab5bf_62627ae26fd9a427d3728938_6260850f6d2476a1f0be78e8_AC%2525E2%252580%2525A2Sacs-de-riz-recycl%2525C3%2525A9s_.jpeg"
+                        alt="Spices" class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>6 100 FCFA</span>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://mianmedia.com/wp-content/uploads/2023/02/ustanciles3.jpg" alt="Scrub"
+                        class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>6 470 FCFA</span>
+                    <span class="video-indicator">▶</span>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://pipcke.fr/idees-deco/wp-content/uploads/2023/04/salon-deco-africaine-tableaux-motifs-geometriques-poufs-en-cuir.jpeg"
+                        alt="Tubes Vertical" class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>5 800 FCFA</span>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwVTIjlHg9nWODHmXVFYSgKf4FWBcVWrEwYg&s"
+                        alt="Tubes Scattered" class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>5 390 FCFA</span>
+                </div>
+
+                <div class="product-card">
+                    <img src="https://www.luckyfind.fr/sites/luckyfind/files/classifieds/142027-623c7e1432fd2-623c7d912e672-063.jpg"
+                        alt="Cards" class="image-placeholder">
+                    <span class="prices"><i class="fa-solid fa-tag"></i>2 240 FCFA <s class="old-price">4 480
+                            FCFA</s></span>
+                </div>
+
+            </div>
             <a href="autre-page.html" class="afri-see-more">Vois plus</a>
+
+
+             
 
         </div>
 
     </section>
     <!-- Fin -->
-
-
-
 
     <section class="video-section">
 
@@ -1000,6 +1287,44 @@
         </div>
 
     </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const points = document.querySelectorAll(".tourist-point");
+            const cityInfo = document.getElementById("cityInfo");
+            const infoCityName = document.getElementById("infoCityName");
+            const infoCityDescription = document.getElementById("infoCityDescription");
+            const infoCityAttractions = document.getElementById("infoCityAttractions");
+            if (!points.length || !cityInfo) return; // sécurité
+            points.forEach(point => {
+                // ✅ Survol du point → afficher l’infobulle
+                point.addEventListener("mouseenter", (e) => {
+                    const city = point.dataset.city;
+                    const desc = point.dataset.description;
+                    const attr = point.dataset.attractions;
+                    infoCityName.textContent = city;
+                    infoCityDescription.textContent = desc;
+                    infoCityAttractions.textContent = "À visiter : " + attr;
+                    // Positionner l’infobulle à côté du point
+                    const rect = point.getBoundingClientRect();
+                    const sectionRect = document.querySelector(".video-section")
+                        .getBoundingClientRect();
+                    cityInfo.style.top = rect.top - sectionRect.top + "px";
+                    cityInfo.style.left = rect.left - sectionRect.left + 40 + "px";
+                    cityInfo.classList.add("show");
+                });
+                // ✅ Sortie de la souris → cacher
+                point.addEventListener("mouseleave", () => {
+                    cityInfo.classList.remove("show");
+                });
+            });
+            // ✅ Clic ailleurs = fermer
+            document.addEventListener("click", (e) => {
+                if (!e.target.closest(".tourist-point")) {
+                    cityInfo.classList.remove("show");
+                }
+            });
+        });
+    </script>
 
     <!-- ===== Section Favoris ===== -->
     <div class="afriba-section">
@@ -1289,16 +1614,18 @@
         </div>
     </section>
 
-    <!-- inspiration-section -->
+    <!-- SECTION INSPIRATION AFRIBA -->
     <div class="inspiration-section">
+        <!-- HEADER -->
         <div class="header">
             <h2>Faites le plein d'inspiration !</h2>
             <p>Découvrez nos articles populaires et interactifs</p>
         </div>
 
+        <!-- CAROUSEL -->
         <div class="carousel-wrapper">
-            <div class="carousel-content">
 
+            <div class="carousel-content">
                 <!-- Image 1 -->
                 <div class="product-vignette">
                     <img src="https://cdn.manomano.com/images/images_products/26714707/P/134256510_1.jpg"
@@ -1385,32 +1712,10 @@
                         <div class="af-tooltip">Suspension - 30 000 FCFA</div>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
-
-
-
-
-
-
- 
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
 
     <footer class="main-footer">
         <!-- ======= Section ENGAGEMENTS ======= -->
@@ -1534,23 +1839,35 @@
         </section>
 
         <!-- Partenaires -->
-        <div class="footer-partners">
-            <h4>Nos Partenaires</h4>
-            <div class="partners-logos">
+        <!-- Partenaires et Moyens de paiement -->
+        <div class="footer-partners-payments">
+            <!-- Partenaires à gauche -->
+            <div class="footer-column">
+                <h4>Nos Partenaires</h4>
+                <div class="partners-logos">
+                    <img src="https://loutche.com/web/img/logo-sdc.png" alt="Loutche">
+                    <img src="https://static.wixstatic.com/media/00f1e2_91a966a222c6454487e30e9a6ba36e28~mv2.jpeg"
+                        alt="O'black">
 
-                <img src="https://loutche.com/web/img/logo-sdc.png" alt="Loutche">
+                </div>
+            </div>
 
-                <img src="https://static.wixstatic.com/media/00f1e2_91a966a222c6454487e30e9a6ba36e28~mv2.jpeg"
-                    alt="O'black">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/120px-Orange_logo.svg.png"
-                    alt="Orange">
-                <img src="https://www.abidjan.net/public/img/logo-mtn.jpg" alt="MTN">
-                <img src="https://yt3.googleusercontent.com/So4zVrbYgRhy9UskS8_Fduc5rq6uO6dq6uZec4PwMRhKEJEcJ6gEGysdzyt3jxfC36B-mZ4P=s900-c-k-c0x00ffffff-no-rj"
-                    alt="Moov Africa">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcw9nTOr4xrkqfmKBu99TkjLX5_BEw0zMaiA&s"
-                    alt="Ecobank">
-                <img src="https://play-lh.googleusercontent.com/NgAdQMq9Mu2NTJredx6COxScVB3tp153h_bVKQTXUt9Aou0Lz1PfffaQt5jFN9jlBfo"
-                    alt="Wave">
+            <!-- Moyens de paiement à droite -->
+            <div class="footer-column">
+                <h4>Nos Moyens de Paiement</h4>
+                <div class="payments-logos">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/120px-Orange_logo.svg.png"
+                        alt="Orange Money">
+                    <img src="https://www.abidjan.net/public/img/logo-mtn.jpg" alt="MTN">
+                    <img src="https://yt3.googleusercontent.com/So4zVrbYgRhy9UskS8_Fduc5rq6uO6dq6uZec4PwMRhKEJEcJ6gEGysdzyt3jxfC36B-mZ4P=s900-c-k-c0x00ffffff-no-rj"
+                        alt="Moov Money">
+                    <img src="https://play-lh.googleusercontent.com/NgAdQMq9Mu2NTJredx6COxScVB3tp153h_bVKQTXUt9Aou0Lz1PfffaQt5jFN9jlBfo"
+                        alt="Wave Money">
+                    <img src="https://img.freepik.com/free-vector/person-receiving-package-paying-delivery_23-2148773021.jpg?semt=ais_hybrid&w=740&q=80"
+                        alt="Cash à la livraison">
+                    <img src="https://p.kindpng.com/picc/s/613-6132525_illustration-hd-png-download.png"
+                        alt="Carte Bancaire">
+                </div>
             </div>
         </div>
 

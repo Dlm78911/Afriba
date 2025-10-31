@@ -11,6 +11,18 @@ body {
   color: #333;
 }
 
+ :root{
+    --bg: #f7f4f0;         /* fond page doux */
+    --card: #ffffff;       /* cartes / conteneur */
+    --muted: #6b6b6b;      /* texte secondaire */
+    --text: #2b2621;       /* texte principal */
+    --accent: #d97900;     /* couleur chaude Afriba */
+    --accent-soft: #ffd8a6;/* accent doux */
+    --led-bg: #0b0b0b;     /* fond LED simple */
+    --led-text: #ffb347;   /* texte LED */
+    --shadow: rgba(11,8,5,0.06);
+  }
+
 /* --- NAVBAR --- */
 .navbar {
   position: absolute;
@@ -88,154 +100,197 @@ body {
 
 /* --- Dropdown flottant --- */
 /* --- Container --- */
+/* Container du dropdown déjà présent */
 .flag-dropdown {
   display: none;
   position: absolute;
   top: 50px;
-  left: 0; /* aligné avec le début du drapeau */
+  left: 0;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   padding: 18px;
-  width: 280px;
+  width: 320px; /* un peu plus large */
   font-family: "Segoe UI", sans-serif;
   opacity: 0;
   transform: translateY(5px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.22s ease, transform 0.22s ease;
   z-index: 1500;
+  pointer-events: none; /* fermé par défaut */
 }
 
-/* Titre et description */
-.flag-dropdown h4 {
-  margin: 0 0 6px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #222;
-}
-
-.flag-dropdown p {
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 12px;
-}
-
-.flag-dropdown label {
-  font-size: 13px;
-  font-weight: 600;
-  margin-top: 10px;
-  display: block;
-  color: #333;
-}
-
-/* Affiche le dropdown au survol */
-.header-flag:hover .flag-dropdown {
+/* Affichage quand ouvert */
+.header-flag.open .flag-dropdown,
+.header-flag:hover .flag-dropdown,
+.flag-dropdown:hover {
   display: block;
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
+/* Reset des styles non voulus qui peuvent produire des "cercles" */
+.flag-dropdown,
+.flag-dropdown * {
+  list-style: none !important; /* enlève marqueurs si présent */
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  box-sizing: border-box;
+}
 
-/* --- Bouton --- */
-.btn-orange {
-  background: linear-gradient(45deg, #ff6600, #ff9900);
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  width: 100%;
-  margin-top: 12px;
+/* Labels */
+.flag-dropdown label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
   font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.btn-orange:hover {
-  background: linear-gradient(45deg, #ff8800, #ffaa33);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255,136,0,0.3);
+  color: #333;
+  cursor: default;
+  user-select: none;
 }
 
-/* --- Custom select --- */
+/* Custom select - wrapper */
 .custom-select {
   position: relative;
-  width: 100%;
-  cursor: pointer;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
+
+/* --- Custom select selected --- */
 .custom-select .selected {
-  border: 1px solid #ddd;
-  padding: 9px 12px;
-  border-radius: 6px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
-  background: #fff;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f7f7f8; /* fond visible même en mode normal */
+  cursor: pointer;
+  border: 1px solid rgba(0,0,0,0.06);
+  color: #222; /* texte visible */
+}
+
+/* Texte dans selected */
+.custom-select .selected .text {
+  flex: 1;
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  color: #222; /* couleur texte toujours visible */
 }
-.custom-select .selected:hover {
-  border-color: #ff6600;
-  box-shadow: 0 0 6px rgba(255,102,0,0.25);
-}
-.custom-select img {
+
+/* Image inside selected */
+.custom-select .selected img {
   width: 20px;
   height: 14px;
-}
-.custom-select .arrow {
-  border: solid #666;
-  border-width: 0 2px 2px 0;
-  display: inline-block;
-  padding: 4px;
-  transform: rotate(45deg);
-  transition: transform 0.3s ease;
-}
-.custom-select.active .arrow {
-  transform: rotate(-135deg);
+  object-fit: cover;
+  border-radius: 2px;
 }
 
-/* --- Options --- */
-.custom-select .options {
-  display: none;
-  position: absolute;
-  top: 105%;
-  left: 0;
-  width: 100%;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  z-index: 2000;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  animation: fadeSlide 0.25s ease;
+/* Arrow indicator */
+.custom-select .selected .arrow {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  transform: rotate(0deg);
+  transition: transform 0.18s ease;
+  mask: linear-gradient(#000, #000);
+  background: currentColor;
+  opacity: .6;
 }
+.custom-select.open .selected .arrow {
+  transform: rotate(180deg);
+}
+
+/* --- Options list --- */
+.custom-select .options {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #0c0c0c; /* fond légèrement beige/orange clair */
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  max-height: 220px;
+  overflow-y: auto; /* scroll actif si nécessaire */
+  display: none;    /* masqué par défaut */
+  z-index: 1600;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Afficher quand open */
+.custom-select.open .options {
+  display: block;
+}
+
+/* Chaque option */
+/* Chaque option */
 .custom-select .options div {
-  padding: 10px 12px;
-  font-size: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: background 0.2s ease;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  background: #fffaf5; /* fond légèrement beige/orange clair */
+  color: #222;         /* texte visible */
+  transition: background 0.2s, color 0.2s;
 }
+
+/* Forcer la couleur du span à l’intérieur */
+.custom-select .options div span {
+  color: inherit; /* hérite de la couleur de la div */
+}
+
+/* Hover des options */
 .custom-select .options div:hover {
-  background: #fff4eb;
+  background: #ffedd6;
   color: #ff6600;
 }
-
-@keyframes fadeSlide {
-  from {opacity: 0; transform: translateY(-5px);}
-  to {opacity: 1; transform: translateY(0);}
+.custom-select .options div:hover span {
+  color: inherit; /* span prend la couleur du hover */
 }
 
-/* --- Selects classiques --- */
-select {
-  width: 100%;
-  padding: 9px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+
+/* Pour les selects sans image */
+.custom-select[data-type="langue"] .options .option,
+.custom-select[data-type="devise"] .options .option {
+  padding-left: 12px;
+}
+
+/* Bouton Sauvegarder */
+.flag-dropdown .btn-orange {
+  margin-top: 12px;
+  margin-left: 8px;       /* décale légèrement à gauche */
+  width: calc(100% - 8px); /* largeur quasi totale */
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg,#ff8c00,#ff6b00);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Scrollbar personnalisée (facultatif, plus fin) */
+.custom-select .options::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-select .options::-webkit-scrollbar-thumb {
+  background: rgba(255,102,0,0.4);
+  border-radius: 3px;
+}
+.custom-select .options::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* --- Fin --- */
+
+
+
+
+
+
+
+
 
 .btn-orange {
   background: #ff6600;
@@ -464,88 +519,22 @@ select {
 
 
 /* --- Dropdown panier --- */
-.cart-dropdown {
-  display: none;
-  position: absolute;
-  top: 50px;           /* sous l'icône panier */
-  right: 0;            /* aligné à droite */
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-  padding: 20px;
-  width: 250px;
-  z-index: 1500;
-  font-family: Arial, sans-serif;
-  text-align: left;
-  transition: all 0.3s ease;
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff6600;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
 }
 
-.cart-dropdown h4 {
-  margin: 0 0 10px;
-  font-size: 15px;
-  font-weight: bold;
-  color: #222;
-}
 
-.cart-dropdown p {
-  font-size: 13px;
-  color: #555;
-  margin-bottom: 15px;
-  line-height: 1.4;
-}
 
-.btn-orange {
-  background: #ff6600;
-  color: #fff;
-  padding: 10px 0;
-  border: none;
-  border-radius: 6px;
-  width: 100%;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
 
-.btn-orange:hover {
-  background: #e05500;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(224,85,0,0.3);
-}
 
-/* Apparition du dropdown avec animation */
-.cart-dropdown.show {
-  display: block;
-  opacity: 0;
-  transform: translateY(-10px);
-  animation: dropdown-fade 0.25s forwards;
-}
-
-@keyframes dropdown-fade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Styles icônes et navbar */
-.header-option {
-  color: #fff;
-  transition: color 0.3s;
-}
-
-.header-option:hover {
-  color: #ff6600;
-}
-
-.navbar.scrolled .header-option {
-  color: #333;
-}
-
-.navbar.scrolled .header-option:hover {
-  color: #ff6600;
-}
 
 
 /* --- Dropdown messagerie --- */
@@ -564,12 +553,13 @@ select {
   text-align: center;
 }
 
-/* Dropdown */
+/* message-dropdown */
+/* Messagerie */
 .message-dropdown {
   display: none;
   position: absolute;
-  top: 55px;
-  right: 50px;  /* 🔹 décale vers la gauche */
+  top: 70px; /* espace en haut, pour ne pas coller à la navbar */
+  right: 60px; /* décale légèrement vers la gauche ou droite selon besoin */
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
@@ -581,12 +571,16 @@ select {
   overflow: hidden;
 }
 
+
+
+/* Affichage */
 .message-dropdown.show {
   display: block;
   opacity: 1;
   transform: translateY(0);
 }
 
+/* Titre */
 .message-dropdown h4 {
   margin: 0;
   padding: 12px 15px;
@@ -599,7 +593,7 @@ select {
 /* Items */
 .msg-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* pour aligner en haut avec l'image */
   gap: 10px;
   padding: 12px 15px;
   border-bottom: 1px solid #f0f0f0;
@@ -616,11 +610,13 @@ select {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  flex-shrink: 0;
+  margin-top: 2px; /* décale un peu l'image vers le bas */
 }
 
 .msg-text {
   flex: 1;
-  min-width: 0; /* important pour ellipsis */
+  min-width: 0; /* nécessaire pour ellipsis */
 }
 
 .msg-text p {
@@ -649,6 +645,7 @@ select {
   background: #fff6f1;
 }
 
+/* Bouton voir toutes les conversations */
 .see-all {
   display: block;
   text-align: center;
@@ -658,11 +655,18 @@ select {
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
 .see-all:hover {
   background: #e05500;
+}
+
+/* Décalage par rapport à la navbar */
+#messageToggle {
+  position: relative;
+  cursor: pointer;
+  margin-left: 10px; /* petit espace à gauche si nécessaire */
 }
 
 
@@ -670,18 +674,24 @@ select {
 
 
 /* livrason */
+/* --- Dropdown Livraison --- */
+.header-option#deliveryToggle {
+  position: relative; /* nécessaire pour positionner le dropdown */
+}
+
+/* Dropdown principal */
 .delivery-dropdown {
   display: none;
   position: absolute;
-  top: 50px; /* sous l'icône */
-  right: 0;  /* aligné avec l'icône */
+  top: 110%;        /* juste sous l’icône */
+  right: 0;         /* aligné au bord droit de l’icône */
+  margin-right: 80px; /* décale légèrement vers la gauche */
+  width: 300px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  width: 300px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   z-index: 1500;
   opacity: 0;
-  transform: translateY(-10px);
   transition: all 0.3s ease;
   overflow: hidden;
 }
@@ -692,6 +702,7 @@ select {
   transform: translateY(0);
 }
 
+/* Titre du dropdown */
 .delivery-dropdown h4 {
   margin: 0;
   padding: 12px 15px;
@@ -701,6 +712,7 @@ select {
   border-bottom: 1px solid #eee;
 }
 
+/* Chaque élément de livraison */
 .delivery-item {
   display: flex;
   align-items: flex-start;
@@ -714,6 +726,7 @@ select {
   background: #fdf4ec;
 }
 
+/* Icônes des items */
 .delivery-item i {
   font-size: 20px;
   color: #ff6600;
@@ -721,6 +734,7 @@ select {
   margin-top: 2px;
 }
 
+/* Texte des items */
 .delivery-text p {
   margin: 0;
   font-size: 14px;
@@ -732,40 +746,27 @@ select {
   color: #888;
 }
 
-.btn-orange {
+/* Bouton du dropdown */
+.delivery-dropdown .btn-orange {
   display: block;
-  text-align: center;
-  margin: 10px;
+  width: calc(100% - 20px); /* laisse un petit padding à gauche/droite */
+  margin: 10px auto;
   padding: 10px;
-  background: #ff6600;
+  text-align: center;
+  background: linear-gradient(135deg,#ff8c00,#ff6b00);
   color: #fff;
-  border-radius: 6px;
+  border: none;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
-  text-decoration: none;
-  transition: background 0.3s ease;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.btn-orange:hover {
+.delivery-dropdown .btn-orange:hover {
   background: #e05500;
+  transform: translateY(-1px);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -908,8 +909,8 @@ select {
 .connexion-dropdown {
   display: none;
   position: absolute;
-  top: 55px;
-  right: 0;
+  top: 65px;       /* +10px pour descendre le menu */
+  right: 10px;     /* petit décalage du bord droit */
   background: linear-gradient(135deg, #ffffff, #f9f9f9);
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
@@ -949,6 +950,7 @@ select {
   color: #fff;
   padding-left: 22px; /* petit effet slide */
 }
+
 
 
 /* --- Dropdown recherche --- */
@@ -1277,7 +1279,7 @@ select {
   position: absolute;
   top: -4px;
   right: -4px;
-  background: #f44336;
+  background: #ea9008;
   color: #fff;
   font-size: 10px;
   font-weight: bold;
@@ -1286,11 +1288,20 @@ select {
   line-height: 1;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
+.afrishop-alert-count {
+    /* Texte en 3D léger */
+    text-shadow:
+        1px 1px 0 #00000040,  /* ombre noire douce pour relief */
+        2px 2px 0 #00000020;  /* seconde ombre pour effet profondeur */
+}
+
 
 /* ✅ Tooltip natif via `title` */
 .afribar-item[title] {
   position: relative;
 }
+
+
 /* --- FIN --- */
 
 
@@ -1704,7 +1715,7 @@ select {
 /* interface produit */
 /* ✅ Principale */
 .afrimarket-social-trends{
-  background-color: #f1f1f1; /* gris clair doux et professionnel */
+  background-color:var(--bg) ; /* gris clair doux et professionnel */
 }
 .trend-containe {
     display: flex;       
@@ -2020,6 +2031,114 @@ select {
 }
 
 
+/* === Bouton Favori (coeur) === */
+.fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 5; /* reste au-dessus des images */
+}
+
+/* Survol : cœur rouge + léger zoom */
+.fav-btn:hover {
+  background: #ff5555;
+  transform: scale(1.1);
+}
+
+/* Quand l’utilisateur clique (favori activé) */
+.fav-btn.active {
+  background: #ff4444;
+  color: #fff;
+}
+
+/* Optionnel : petit effet pulsation */
+.fav-btn.active {
+  animation: pulse 0.5s;
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* === Effet Zoom sur images === */
+.trend-card img,
+.card img,
+.product-card .image-placeholder {
+  transition: transform 0.4s ease;
+}
+
+.trend-card:hover img,
+.card:hover img,
+.product-card:hover .image-placeholder {
+  transform: scale(1.05);
+}
+
+.trend-card {
+    position: relative; /* pour tous les éléments absolus à l'intérieur */
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+/* Image principale */
+.trend-card img.primary {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* Image secondaire */
+.trend-card img.secondary {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    border-radius: 12px;
+    z-index: 1; /* dessous les overlays */
+}
+
+.trend-card:hover img.secondary {
+    opacity: 1;
+}
+
+/* Les éléments qui doivent rester visibles */
+.trend-card .country-icon,
+.trend-card .fav-btn,
+.trend-card .product-info,
+.trend-card .price-colors-container,
+.trend-card .bottom-info {
+    position: absolute; /* pour rester au-dessus */
+    z-index: 2;         /* supérieur à img.secondary */
+}
+
+/* Ajuster les positions individuelles */
+.country-icon { top: 12px; left: 12px; z-index: 3; }
+.fav-btn { top: 10px; right: 10px; z-index: 3; }
+.product-info { bottom: 0; left: 0; right: 0; z-index: 2; }
+.price-colors-container { bottom: 52px; right: 12px; z-index: 2; }
+.bottom-info { bottom: 12px; left: 12px; right: 12px; z-index: 2; }
+
+/* Optionnel : hover image secondaire légèrement zoom */
+.trend-card:hover img.secondary {
+    transform: scale(1.05);
+}
 
 
 /* FIN */
@@ -2140,7 +2259,9 @@ select {
   transition: opacity 0.3s ease, transform 0.3s ease;
   text-align: center;
   z-index: 10;
+  margin-left: 10px; /* ✅ ajoute ceci */
 }
+
 
 .city-info h3 {
   font-size: 1.3rem;
@@ -2198,6 +2319,8 @@ select {
   }
 }
 
+/* Fin */
+
 
 
 
@@ -2220,7 +2343,7 @@ select {
 
 /* Section principale pleine largeur */
 .afriba-section {
-  background-color: #f1f1f1; /* gris clair uniforme */
+  background-color: var(--bg); /* gris clair uniforme */
   padding: 30px 20px;         /* espace interne */
   width: 100%;                /* prend toute la largeur */
   box-sizing: border-box;     /* inclut le padding dans la largeur */
@@ -2499,13 +2622,13 @@ select {
       padding: 4px 12px;
       font-size: 14px;
       font-weight: bold;
-      color: #0ff;
+      color: #fb8500;
       font-family: monospace;
       background: rgba(0,0,0,0.7);
       border-radius: 4px;
       animation: flicker 1.2s infinite;
       z-index: 4;
-      text-shadow: 0 0 6px #0ff, 0 0 14px #0ff;
+      text-shadow: 0 0 6px #fb8500, 0 0 14px #fb8500;
     }
 
     @keyframes flicker {
@@ -2591,6 +2714,106 @@ select {
     .video-overlay .start-btn:hover {
       transform: translateX(5px);
     }
+
+
+
+    /* --- CONTENEUR DE GRILLE (STYLE MAÇONNERIE) --- */
+.grid-container {
+    column-count: 3;
+    column-gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- CARTE PRODUIT --- */
+.product-card {
+    break-inside: avoid;
+    position: relative;
+    margin-bottom: 16px;
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* --- IMAGE DANS LE CADRE --- */
+.image-placeholder {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px 8px 0 0;
+    background-color: #f5f5f5;
+    transition: transform 0.4s ease;
+}
+
+/* effet pro survol image */
+.product-card:hover .image-placeholder {
+    transform: scale(1.03);
+}
+
+/* --- VARIATIONS DE HAUTEUR (pour effet maçonnerie Afriba) --- */
+.grid-container .product-card:nth-child(2) .image-placeholder { height: 340px; object-position: top; }
+.grid-container .product-card:nth-child(4) .image-placeholder { height: 360px; object-position: center; }
+/* --- Carte Spices : revenir à l'ancien style --- */
+.grid-container .product-card:nth-child(5) .image-placeholder {
+    height: 300px;      /* hauteur standard pour l'ancien style */
+    object-fit: cover;
+    object-position: center;
+}
+
+.grid-container .product-card:nth-child(6) .image-placeholder { height: 280px; object-position: center top; }
+.grid-container .product-card:nth-child(8) .image-placeholder { height: 320px; object-position: bottom; }
+.grid-container .product-card:nth-child(9) .image-placeholder { height: 340px; object-position: top; }
+
+/* --- PRIX (STYLE AFRIBA PRO) --- */
+.prices {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: linear-gradient(135deg, #ff7a18, #ffb347);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1em;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.old-price {
+    color: rgba(255,255,255,0.7);
+    font-weight: 400;
+    text-decoration: line-through;
+    margin-left: 6px;
+    font-size: 0.85em;
+}
+
+/* --- INDICATEUR VIDÉO --- */
+.video-indicator {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-size: 0.7em;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+}
 /* --- FIN --- */
 
 
@@ -2846,6 +3069,39 @@ select {
 .product-button:hover {
   background-color: #d97618;
 }
+
+
+.afriba-videos .video-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.afriba-videos .video-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease, opacity 0.4s ease;
+  opacity: 0.8;
+}
+
+/* === Effet au survol === */
+.afriba-videos .video-card.playing {
+  transform: scale(1.04);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.afriba-videos .video-card.playing video {
+  opacity: 1;
+  transform: scale(1.07);
+}
+
+/* (optionnel) petit effet de retour quand la souris quitte */
+.afriba-videos .video-card:hover {
+  cursor: pointer;
+}
+
 
 /* Fin */
 
@@ -3122,8 +3378,6 @@ select {
 
 
 
-/*inspiration-section*/
-
 /* ========================== */
 /* RESET GLOBAL */
 /* ========================== */
@@ -3131,6 +3385,7 @@ select {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* ========================== */
@@ -3138,7 +3393,7 @@ select {
 /* ========================== */
 .inspiration-section {
   width: 100%;
-  background: #f6f6f6; /* gris clair doux */
+  background: #f6f6f7; /* gris clair doux */
   padding: 50px 0;
 }
 
@@ -3174,16 +3429,41 @@ select {
 /* -------------------------- */
 .carousel-wrapper {
   width: 100%;
-  overflow: hidden;
+  overflow-x: auto;           /* Scroll horizontal activé */
+  overflow-y: hidden;
   position: relative;
   border-radius: 12px;
   padding: 0 2%;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 12px;       /* espace entre images et scrollbar */
+}
+
+/* Scrollbar horizontal fine et orange */
+.carousel-wrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.carousel-wrapper::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.carousel-wrapper::-webkit-scrollbar-thumb {
+  background-color: #ff7a18;
+  border-radius: 4px;
+}
+
+/* Firefox */
+.carousel-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: #ff7a18 #f0f0f0;
 }
 
 .carousel-content {
   display: flex;
   gap: 20px;
-  transition: transform 0.5s ease;
 }
 
 /* -------------------------- */
@@ -3198,7 +3478,6 @@ select {
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* Image simple — pas de hover */
 .product-vignette img {
   width: 100%;
   height: 480px;
@@ -3236,7 +3515,6 @@ select {
     inset 0 -1px 3px rgba(0,0,0,0.25);
 }
 
-/* Halo animé */
 .af-point::after {
   content: "";
   position: absolute;
@@ -3252,7 +3530,6 @@ select {
   100% { transform: scale(1); opacity: 0.8; }
 }
 
-/* Tooltip pour les points */
 .af-tooltip {
   position: absolute;
   top: -40px;
@@ -3274,8 +3551,37 @@ select {
 }
 
 /* -------------------------- */
-/* RESPONSIVE */
+/* FLECHES CAROUSEL */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.9);
+  color: #333;
+  border: none;
+  border-radius: 50%;
+  font-size: 2rem;
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.arrow:hover {
+  background: linear-gradient(90deg, #3bef17, #edbf03);
+  color: #fff;
+}
+
+.arrow.left { left: 10px; }
+.arrow.right { right: 10px; }
+
 /* -------------------------- */
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .carousel-content {
     flex-direction: column;
@@ -3288,10 +3594,15 @@ select {
   .product-vignette img {
     height: 320px;
   }
+
+  .arrow {
+    width: 35px;
+    height: 35px;
+    font-size: 1.5rem;
+  }
 }
 
 /* FIN */
-
 
 
 
@@ -3460,7 +3771,7 @@ select {
   border-radius: 4px;
   border: 1px solid #333;
 }
-
+   
 .country-card span {
   font-size: 11px;
   color: #bbb;
@@ -3473,42 +3784,61 @@ select {
 }
 
 /* --- PARTENAIRES --- */
-.footer-partners {
-  text-align: center;
-  padding: 40px 20px;
-  border-top: 1px solid #333;
-  border-bottom: 1px solid #333;
-  background: rgba(255,255,255,0.02);
+.footer-partners-payments {
+    display: flex;
+    justify-content: space-between; /* Partenaires à gauche, Paiement à droite */
+    flex-wrap: wrap;
+    padding: 40px 20px;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    background: rgba(255,255,255,0.02);
+    gap: 30px;
 }
 
-.footer-partners h4 {
-  margin-bottom: 25px;
-  color: #f28c28;
-  font-size: 18px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+.footer-partners-payments .footer-column {
+    flex: 1 1 300px;
+    text-align: center; /* centré sur mobile */
 }
 
-.partners-logos {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
+.footer-partners-payments h4 {
+    color: #f28c28;
+    margin-bottom: 20px;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
 }
 
-.partners-logos img {
-  height: 40px;
-  width: auto;
-  object-fit: contain;
-  border-radius: 8px;
-  transition: transform 0.3s ease, filter 0.3s ease;
-  cursor: pointer;
+.partners-logos,
+.payments-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
 }
 
-.partners-logos img:hover {
-  transform: scale(1.1);
-  filter: brightness(1.1);
+.partners-logos img,
+.payments-logos img {
+    height: 40px;
+    width: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    cursor: pointer;
 }
+
+.partners-logos img:hover,
+.payments-logos img:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .footer-partners-payments {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
 
 /* --- LIENS RAPIDES --- */
 .footer-links {
