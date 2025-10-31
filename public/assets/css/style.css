@@ -950,6 +950,71 @@ body {
   color: #fff;
   padding-left: 22px; /* petit effet slide */
 }
+/* --- Dropdown connexion & utilisateur connecté --- */
+.connexion-dropdown {
+  display: none;
+  position: absolute;
+  top: 65px;
+  right: 10px;
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  overflow: hidden;
+  z-index: 1500;
+  min-width: 200px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.connexion-dropdown.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.connexion-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  color: #333;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid #eee;
+}
+
+.connexion-dropdown a:last-child {
+  border-bottom: none;
+}
+
+.connexion-dropdown a:hover {
+  background: #ff6600;
+  color: #fff;
+  padding-left: 22px;
+}
+
+/* --- Bouton utilisateur connecté --- */
+.btn-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff7b00, #ff9900);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-user:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255,123,0,0.25);
+}
 
 
 

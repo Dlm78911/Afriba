@@ -379,46 +379,80 @@
 
                 <!-- Bouton connexion -->
                 <div class="header-connexion">
+                    @if(session()->has('afriba_user'))
+                    <!-- Utilisateur connecté -->
+                    <button class="btn-user" id="userToggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" width="20" height="20">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 
+                            0 3.75 3.75 0 0 1 7.5 0ZM4.501 
+                            20.118a7.5 7.5 0 0 1 14.998 
+                            0A17.933 17.933 0 0 1 12 
+                            21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                        {{ session('afriba_user')->nom_complet }}
+                    </button>
+
+                    <!-- Menu utilisateur connecté -->
+                    <div class="connexion-dropdown" id="userMenu">
+                        <a href="/profile"><i class="fa fa-user-circle"></i> Mon profil</a>
+                        <a href="/logout"><i class="fa fa-sign-out-alt"></i> Déconnexion</a>
+                    </div>
+                    @else
+                    <!-- Utilisateur non connecté -->
                     <button class="btn-connexion" id="connexionToggle">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" width="20" height="20">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 
-           0 3.75 3.75 0 0 1 7.5 0ZM4.501 
-           20.118a7.5 7.5 0 0 1 14.998 
-           0A17.933 17.933 0 0 1 12 
-           21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                0 3.75 3.75 0 0 1 7.5 0ZM4.501 
+                20.118a7.5 7.5 0 0 1 14.998 
+                0A17.933 17.933 0 0 1 12 
+                21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                         </svg>
                         Connexion
                     </button>
 
                     <!-- Menu déroulant connexion -->
                     <div class="connexion-dropdown" id="connexionMenu">
-                        <a href="/login"><i class="fa fa-sign-in-alt"></i> Se connecter</a>
-                        <a href="/register"><i class="fa fa-user-plus"></i> Créer un compte</a>
-                        <a href="/profile"><i class="fa fa-user-circle"></i> Mon profil</a>
+                        <a href="/connexion"><i class="fa fa-sign-in-alt"></i> Se connecter</a>
+                        <a href="/inscription"><i class="fa fa-user-plus"></i> Créer un compte</a>
                     </div>
-
+                    @endif
                 </div>
+
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
                         const connexionToggle = document.getElementById("connexionToggle");
-                        const connexionMenu = document.querySelector(".connexion-dropdown");
-                        // Toggle menu
-                        connexionToggle.addEventListener("click", function(e) {
-                            e.stopPropagation();
-                            // Fermer les autres dropdowns
-                            document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
-                                if (menu !== connexionMenu) menu.classList.remove('show');
+                        const connexionMenu = document.getElementById("connexionMenu");
+                        const userToggle = document.getElementById("userToggle");
+                        const userMenu = document.getElementById("userMenu");
+                        // Fonction pour fermer tous les menus
+                        function closeAllMenus(exceptMenu = null) {
+                            [connexionMenu, userMenu].forEach(menu => {
+                                if (menu && menu !== exceptMenu) menu.classList.remove("show");
                             });
-                            // Afficher/masquer le menu Connexion
-                            connexionMenu.classList.toggle('show');
-                        });
+                        }
+                        // Menu connexion (non connecté)
+                        if (connexionToggle) {
+                            connexionToggle.addEventListener("click", function(e) {
+                                e.stopPropagation();
+                                closeAllMenus(connexionMenu);
+                                connexionMenu.classList.toggle("show");
+                            });
+                        }
+                        // Menu utilisateur connecté
+                        if (userToggle) {
+                            userToggle.addEventListener("click", function(e) {
+                                e.stopPropagation();
+                                closeAllMenus(userMenu);
+                                userMenu.classList.toggle("show");
+                            });
+                        }
                         // Empêche fermeture si clic dans le menu
-                        connexionMenu.addEventListener("click", e => e.stopPropagation());
-                        // Fermer menu si clic en dehors
-                        document.addEventListener("click", () => {
-                            connexionMenu.classList.remove("show");
-                        });
+                        if (connexionMenu) connexionMenu.addEventListener("click", e => e.stopPropagation());
+                        if (userMenu) userMenu.addEventListener("click", e => e.stopPropagation());
+                        // Fermer les menus si clic en dehors
+                        document.addEventListener("click", () => closeAllMenus());
                     });
                 </script>
 
@@ -472,24 +506,23 @@
 
             <a href="#shop" class="btn-hero">Découvrir Afriba</a>
             <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const btn = document.querySelector('.btn-hero');
-  btn.addEventListener('click', function(e) {
-    e.preventDefault(); // empêche le lien #shop de sauter brutalement
-
-    // on cible le premier produit de la liste
-    const firstProduct = document.querySelector('.trend-card');
-    if (firstProduct) {
-      const position = firstProduct.getBoundingClientRect().top + window.scrollY - 100;
-      window.scrollTo({
-        top: position,
-        behavior: 'smooth'
-      });
-    }
-  });
-});
-</script>
-
+                document.addEventListener("DOMContentLoaded", function() {
+                    const btn = document.querySelector('.btn-hero');
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault(); // empêche le lien #shop de sauter brutalement
+                        // on cible le premier produit de la liste
+                        const firstProduct = document.querySelector('.trend-card');
+                        if (firstProduct) {
+                            const position = firstProduct.getBoundingClientRect().top + window.scrollY -
+                                100;
+                            window.scrollTo({
+                                top: position,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+            </script>
 
             <div class="hero-stats-simple">
                 <div class="stat">
@@ -575,43 +608,34 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     </div>
     <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const scrollBtn = document.querySelector('.afribar-item[title="Remonter en haut"]');
-    const categorieSection = document.querySelector('.categorie-section');
-
-    if (!scrollBtn || !categorieSection) return; // sécurité
-
-    const sectionTop = categorieSection.offsetTop;
-
-    // Fonction pour montrer ou cacher le bouton
-    function toggleButton() {
-        if (window.scrollY > sectionTop) {
-            scrollBtn.style.display = 'flex';
-        } else {
+        document.addEventListener("DOMContentLoaded", function() {
+            const scrollBtn = document.querySelector('.afribar-item[title="Remonter en haut"]');
+            const categorieSection = document.querySelector('.categorie-section');
+            if (!scrollBtn || !categorieSection) return; // sécurité
+            const sectionTop = categorieSection.offsetTop;
+            // Fonction pour montrer ou cacher le bouton
+            function toggleButton() {
+                if (window.scrollY > sectionTop) {
+                    scrollBtn.style.display = 'flex';
+                } else {
+                    scrollBtn.style.display = 'none';
+                }
+            }
+            // Vérifier la position au scroll
+            window.addEventListener('scroll', toggleButton);
+            // Vérifier dès le chargement (utile après refresh)
+            toggleButton();
+            // Cliquer sur le bouton = remonter juste au-dessus de la section
+            scrollBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: sectionTop - 100, // ajuste la marge avant le haut
+                    behavior: 'smooth'
+                });
+            });
+            // Le bouton est caché au départ
             scrollBtn.style.display = 'none';
-        }
-    }
-
-    // Vérifier la position au scroll
-    window.addEventListener('scroll', toggleButton);
-
-    // Vérifier dès le chargement (utile après refresh)
-    toggleButton();
-
-    // Cliquer sur le bouton = remonter juste au-dessus de la section
-    scrollBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: sectionTop - 100, // ajuste la marge avant le haut
-            behavior: 'smooth'
         });
-    });
-
-    // Le bouton est caché au départ
-    scrollBtn.style.display = 'none';
-});
-</script>
-
-
+    </script>
 
     <!-- 🛍 Section Offres -->
     <section class="offre-section">
@@ -1128,11 +1152,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 </a>
             </div>
 
-          
-
-            
-
-             <div class="grid-container">
+            <div class="grid-container">
 
                 <div class="product-card">
                     <img src="https://hdmag.net/wp-content/uploads/2019/03/okha-mobilier-design.jpg" alt="Puzzle"
@@ -1196,9 +1216,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
             </div>
             <a href="autre-page.html" class="afri-see-more">Vois plus</a>
-
-
-             
 
         </div>
 

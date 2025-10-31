@@ -532,8 +532,10 @@
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
                         <label><input type="checkbox"> Recevoir des promos</label>
                         <div style="font-size:13px;color:var(--muted)">
-                            Déjà inscrit ? <a href="#" id="toLogin" style="color:var(--accent)">Se connecter</a>
+                            Déjà inscrit ? <a href="{{ url('/connexion') }}" style="color:var(--accent)">Se
+                                connecter</a>
                         </div>
+
                     </div>
 
                     <input type="hidden" name="role" value="client">
@@ -554,7 +556,6 @@
             const vendorFields = document.querySelectorAll(".vendor-only");
             const emailField = document.querySelector(".email-field");
             const switchLogin = document.getElementById('switchLogin');
-
             // Gestion des rôles
             roleBtns.forEach(btn => {
                 btn.addEventListener("click", () => {
@@ -562,11 +563,11 @@
                     btn.classList.add("active");
                     const role = btn.dataset.role;
                     roleInput.value = role === "vendor" ? "vendeur" : "client";
-                    vendorFields.forEach(f => f.style.display = (role === "vendor") ? "block" : "none");
+                    vendorFields.forEach(f => f.style.display = (role === "vendor") ? "block" :
+                        "none");
                     emailField.style.display = "block"; // visible toujours
                 });
             });
-
             // Bouton Connexion en haut
             switchLogin.addEventListener("click", () => {
                 switchLogin.classList.add('active');
@@ -574,7 +575,6 @@
                     window.location.href = "/login";
                 }, 500);
             });
-
             // Social login
             const socialBtns = document.querySelectorAll('.social-btn');
             socialBtns.forEach(btn => {
@@ -587,20 +587,17 @@
                     }
                 });
             });
-
             // Custom select pays
             const customSelect = document.querySelector('.custom-select');
             const selected = customSelect.querySelector('.selected');
             const optionsList = customSelect.querySelector('.options');
             let paysSelected = "";
-
             customSelect.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isOpen = optionsList.style.display === 'block';
                 document.querySelectorAll('.options').forEach(opt => opt.style.display = 'none');
                 optionsList.style.display = isOpen ? 'none' : 'block';
             });
-
             optionsList.querySelectorAll('li').forEach(option => {
                 option.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -611,11 +608,9 @@
                     optionsList.style.display = 'none';
                 });
             });
-
             document.addEventListener('click', () => {
                 optionsList.style.display = 'none';
             });
-
             // Form submit avec toast et success message
             const authForm = document.getElementById('authForm');
             const toast = document.getElementById('toast');
@@ -626,7 +621,6 @@
                 toast.classList.add('show');
                 setTimeout(() => toast.classList.remove('show'), 2500);
             }
-
             authForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const formData = new FormData(authForm);
@@ -637,7 +631,6 @@
                 const password = formData.get('password');
                 const confirm = formData.get('password_confirmation');
                 const socialSelected = document.querySelector('.social-btn.checked');
-
                 if (!fullname || !phone || !ville || !commune || !password) {
                     showToast("Merci de remplir tous les champs");
                     return;
@@ -654,23 +647,21 @@
                     showToast("Veuillez sélectionner un mode de connexion sociale");
                     return;
                 }
-
                 formData.append('pays', paysSelected);
                 formData.append('social',
                     socialSelected.classList.contains('google') ? 'google' :
                     socialSelected.classList.contains('facebook') ? 'facebook' :
                     'linkedin'
                 );
-
                 try {
                     const response = await fetch(authForm.action, {
                         method: 'POST',
                         body: formData,
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
                     });
-
                     const data = await response.json();
-
                     if (data.success) {
                         successMessage.textContent = "🎉 Inscription réussie !";
                         successMessage.style.display = 'block';
