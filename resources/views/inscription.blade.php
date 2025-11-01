@@ -109,6 +109,48 @@
             color: rgba(255, 255, 255, 0.95);
         }
 
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 22px;
+            background: linear-gradient(90deg, #ff7b00, #ffb700, #ff7b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s infinite linear;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        .brand-text .ak {
+            color: transparent;
+            background: linear-gradient(90deg, #ff9a00, #ff7b00, #ffc700);
+            -webkit-background-clip: text;
+            animation: gradientMove 4s infinite linear;
+        }
+
+        .brand-text .sur {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            margin: 0 4px;
+        }
+
+        .brand-text .af {
+            color: transparent;
+            background: linear-gradient(90deg, #fff, #ffd580, #ffae00);
+            -webkit-background-clip: text;
+            animation: gradientMove 2.5s infinite alternate;
+        }
+
+
         /* CARD */
         .card {
             background: var(--card);
@@ -420,7 +462,9 @@
                 <div class="brand">
                     <div class="logo">AF</div>
                     <div>
-                        <div style="font-weight:700">Afriba</div>
+                        <div class="brand-text">
+                            <span class="ak">Akwaba</span> <span class="sur">sur</span> <span class="af">Afriba</span>
+                        </div>
                         <div style="font-size:12px;color:rgba(255,255,255,0.85)">Marketplace Africaine</div>
                     </div>
                 </div>

@@ -136,33 +136,72 @@
 
             <!-- Barre de recherche -->
 
-            <div class="header-center">
-                <div class="search-bar">
-                    <input type="text" placeholder="Que cherchez-vous ?" id="searchInput">
-                    <button id="searchToggle"><i class="fas fa-search"></i></button>
+           <div class="header-center">
+    <div class="search-bar">
+        <input type="text" placeholder="Que cherchez-vous ?" id="searchInput">
+        <button id="searchToggle"><i class="fas fa-search"></i></button>
 
-                    <!-- Menu recherche -->
-                    <div class="search-dropdown" id="searchMenu">
-                        <div class="search-section">
-                            <strong>Recherches récentes</strong>
-                            <ul>
-                                <li>Robe africaine</li>
-                                <li>Boubou homme</li>
-                                <li>Bijoux artisanaux</li>
-                            </ul>
-                        </div>
-                        <div class="search-section">
-                            <strong>Suggestions populaires</strong>
-                            <ul>
-                                <li>Chaussures traditionnelles</li>
-                                <li>Paniers en osier</li>
-                                <li>Tissus Wax</li>
-                            </ul>
-                        </div>
-                        <a href="#" class="advanced-search">Recherche avancée</a>
-                    </div>
-                </div>
+        <!-- Dropdown recherche -->
+        <div class="search-dropdown" id="searchMenu">
+            <div class="search-section">
+                <strong>Recherches récentes</strong>
+                <ul>
+                    <li>Robe africaine</li>
+                    <li>Boubou homme</li>
+                    <li>Bijoux artisanaux</li>
+                </ul>
             </div>
+            <div class="search-section">
+                <strong>Suggestions populaires</strong>
+                <ul>
+                    <li>Chaussures traditionnelles</li>
+                    <li>Paniers en osier</li>
+                    <li>Tissus Wax</li>
+                </ul>
+            </div>
+            <a href="#" class="advanced-search">Recherche avancée</a>
+        </div>
+    </div>
+</div>
+<script>
+    const searchInput = document.getElementById('searchInput');
+const searchMenu = document.getElementById('searchMenu');
+const searchBar = document.querySelector('.search-bar');
+const searchButton = document.getElementById('searchToggle');
+
+// Clic sur l'input → ouvre dropdown
+searchInput.addEventListener('click', (e) => {
+  e.stopPropagation(); // empêche la fermeture immédiate
+  searchMenu.classList.add('show');
+});
+
+// Empêche que cliquer dans le dropdown le ferme
+searchMenu.addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+
+// Clic n'importe où ailleurs → fermer dropdown
+document.addEventListener('click', () => {
+  searchMenu.classList.remove('show');
+});
+
+// Bouton recherche → ne touche pas au dropdown
+searchButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log("Recherche lancée :", searchInput.value);
+});
+
+// Scroll effect pour navbar
+window.addEventListener('scroll', () => {
+  const navbar = document.querySelector('.navbar');
+  if (window.scrollY > 20) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+</script>
 
             <!-- Icônes à droite -->
             <div class="header-right">
