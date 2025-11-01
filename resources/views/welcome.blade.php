@@ -435,65 +435,69 @@
                     </div>
                     @endif
                 </div>
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        const connexionToggle = document.getElementById("connexionToggle");
-                        const connexionMenu = document.getElementById("connexionMenu");
-                        const userToggle = document.getElementById("userToggle");
-                        const userMenu = document.getElementById("userMenu");
-                        // Fonction pour fermer tous les menus
-                        function closeAllMenus(exceptMenu = null) {
-                            [connexionMenu, userMenu].forEach(menu => {
-                                if (menu && menu !== exceptMenu) menu.classList.remove("show");
-                            });
-                        }
-                        // Menu connexion (non connecté)
-                        if (connexionToggle && connexionMenu) {
-                            connexionToggle.addEventListener("click", function(e) {
-                                e.stopPropagation();
-                                closeAllMenus(connexionMenu);
-                                connexionMenu.classList.toggle("show");
-                            });
-                        }
-                        // Menu utilisateur connecté
-                        if (userToggle && userMenu) {
-                            userToggle.addEventListener("click", function(e) {
-                                e.stopPropagation();
-                                closeAllMenus(userMenu);
-                                userMenu.classList.toggle("show");
-                            });
-                        }
-                        // Empêche fermeture si clic dans le menu
-                        if (connexionMenu) connexionMenu.addEventListener("click", e => e.stopPropagation());
-                        if (userMenu) userMenu.addEventListener("click", e => e.stopPropagation());
-                        // Fermer les menus si clic en dehors
-                        document.addEventListener("click", () => closeAllMenus());
-                        // --- Salutation dynamique (uniquement si utilisateur connecté) ---
-                        @if(session() - > has('afriba_user'))
-                        const salutationText = document.getElementById("salutationText");
-                        const flag = document.getElementById("countryFlag");
-                        const now = new Date();
-                        const hour = now.getHours();
-                        let greeting = "";
-                        if (hour >= 5 && hour < 12) {
-                            greeting = "Bonjour";
-                        } else if (hour >= 12 && hour < 18) {
-                            greeting = "Bon après-midi";
-                        } else {
-                            greeting = "Bonsoir";
-                        }
-                        const userName =
-                            "{{ explode(' ', session('afriba_user')->nom_complet ?? session('afriba_user')->nom ?? 'Utilisateur')[0] }}";
-                        if (salutationText) {
-                            salutationText.textContent = `${greeting}, ${userName}`;
-                        }
-                        const userCountry = "{{ strtolower(session('afriba_user')->pays ?? 'CI') }}";
-                        if (flag) {
-                            flag.src = `https://flagcdn.com/w20/${userCountry}.png`;
-                        }
-                        @endif
-                    });
-                </script>
+               <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const connexionToggle = document.getElementById("connexionToggle");
+    const connexionMenu = document.getElementById("connexionMenu");
+    const userToggle = document.getElementById("userToggle");
+    const userMenu = document.getElementById("userMenu");
+
+    function closeAllMenus(exceptMenu = null) {
+        [connexionMenu, userMenu].forEach(menu => {
+            if (menu && menu !== exceptMenu) menu.classList.remove("show");
+        });
+    }
+
+    if (connexionToggle && connexionMenu) {
+        connexionToggle.addEventListener("click", function(e) {
+            e.stopPropagation();
+            closeAllMenus(connexionMenu);
+            connexionMenu.classList.toggle("show");
+        });
+    }
+
+    if (userToggle && userMenu) {
+        userToggle.addEventListener("click", function(e) {
+            e.stopPropagation();
+            closeAllMenus(userMenu);
+            userMenu.classList.toggle("show");
+        });
+    }
+
+    if (connexionMenu) connexionMenu.addEventListener("click", e => e.stopPropagation());
+    if (userMenu) userMenu.addEventListener("click", e => e.stopPropagation());
+    document.addEventListener("click", () => closeAllMenus());
+
+    // --- Salutation dynamique (uniquement si utilisateur connecté) ---
+    @if(session()->has('afriba_user'))
+        const salutationText = document.getElementById("salutationText");
+        const flag = document.getElementById("countryFlag");
+        const now = new Date();
+        const hour = now.getHours();
+        let greeting = "";
+
+        if (hour >= 5 && hour < 12) {
+            greeting = "Bonjour";
+        } else if (hour >= 12 && hour < 18) {
+            greeting = "Bon après-midi";
+        } else {
+            greeting = "Bonsoir";
+        }
+
+        // Nom complet entier
+        const userName = "{{ session('afriba_user')->nom_complet ?? session('afriba_user')->nom ?? 'Utilisateur' }}";
+
+        if (salutationText) {
+            salutationText.textContent = `${greeting}, ${userName}`;
+        }
+
+        const userCountry = "{{ strtolower(session('afriba_user')->pays ?? 'CI') }}";
+        if (flag) {
+            flag.src = `https://flagcdn.com/w20/${userCountry}.png`;
+        }
+    @endif
+});
+</script>
 
             </div>
         </div>

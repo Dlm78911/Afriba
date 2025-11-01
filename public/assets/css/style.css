@@ -909,18 +909,20 @@ body {
 .connexion-dropdown {
   display: none;
   position: absolute;
-  top: 65px;       /* +10px pour descendre le menu */
-  right: 10px;     /* petit décalage du bord droit */
+  top: 65px;        /* position verticale inchangée */
+  right: 0px;       /* décale légèrement vers la gauche du bord droit */
   background: linear-gradient(135deg, #ffffff, #f9f9f9);
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
   overflow: hidden;
   z-index: 1500;
-  min-width: 200px;
+  min-width: 250px; /* plus large que 200px */
+  max-width: 300px; /* optionnel : limite la largeur */
   opacity: 0;
   transform: translateY(-10px);
   transition: all 0.3s ease;
 }
+
 
 .connexion-dropdown.show {
   display: block;
