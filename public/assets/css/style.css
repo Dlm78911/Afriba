@@ -328,15 +328,16 @@ body {
 .search-bar {
   display: flex;
   align-items: center;
-  width: 50%;
-  max-width: 450px;
+  width: 65%;              /* ✅ un peu plus longue */
+  max-width: 580px;        /* ✅ plus grande limite */
   background: #fff;
-  border-radius: 25px;
-  padding: 6px;
+  border-radius: 30px;     /* légèrement plus fine et arrondie */
+  padding: 4px 6px;        /* ✅ plus mince */
   border: 2px solid transparent;
   position: relative;
   transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  height: 38px;            /* ✅ réduit la hauteur totale */
 }
 
 .search-bar:hover {
@@ -354,8 +355,8 @@ body {
   flex: 1;
   border: none;
   outline: none;
-  padding: 8px 12px;
-  font-size: 14px;
+  padding: 6px 12px;      /* ✅ réduit un peu la hauteur */
+  font-size: 13px;        /* ✅ texte légèrement plus petit */
   border-radius: 20px 0 0 20px;
   color: #333;
   background: #fff;
@@ -369,7 +370,7 @@ body {
 /* BUTTON */
 .search-bar button {
   border: none;
-  padding: 8px 14px;
+  padding: 6px 12px;      /* ✅ plus fin */
   border-radius: 0 20px 20px 0;
   cursor: pointer;
   font-size: 14px;
@@ -1320,10 +1321,77 @@ body {
   border-top: 1px solid #ffd2a1;
 }
 
-.welcome-banner strong {
-  color: #ff7b33; /* Orange Afriba */
-  font-weight: 700;
+/* --- Effet texte Afriba en 3D légère et vivante --- */
+.afriba-text {
+  display: inline-block;
+  font-size: 1.2rem; /* ✅ plus petit */
+  font-weight: 600;
+  color: #333;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  perspective: 600px;
+  transform-style: preserve-3d;
+  animation: afribaFloat 4s ease-in-out infinite alternate,
+             afribaPulse 3s ease-in-out infinite;
 }
+
+/* Effet 3D subtil sur tout le texte */
+.afriba-text strong {
+  color: #ff7b33; /* orange Afriba */
+  font-weight: 700;
+  text-shadow:
+    1px 1px 0 #ffb366,
+    2px 2px 0 #ff9933,
+    3px 3px 3px rgba(0,0,0,0.25);
+  transform: translateZ(3px);
+  display: inline-block;
+  animation: afribaGlow 5s ease-in-out infinite alternate;
+}
+
+/* --- Animation : mouvement 3D léger (comme vivant) --- */
+@keyframes afribaFloat {
+  0%   { transform: rotateX(0deg) rotateY(0deg) translateY(0px); }
+  25%  { transform: rotateX(3deg) rotateY(-3deg) translateY(-2px); }
+  50%  { transform: rotateX(-2deg) rotateY(2deg) translateY(2px); }
+  75%  { transform: rotateX(1deg) rotateY(-1deg) translateY(-1px); }
+  100% { transform: rotateX(-3deg) rotateY(3deg) translateY(1px); }
+}
+
+/* --- Animation : pulsation douce, effet "vivant" --- */
+@keyframes afribaPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* --- Animation : brillance douce sur "Afriba" --- */
+@keyframes afribaGlow {
+  0% {
+    text-shadow:
+      1px 1px 0 #ffb366,
+      2px 2px 0 #ff9933,
+      3px 3px 3px rgba(0,0,0,0.25);
+  }
+  50% {
+    text-shadow:
+      0 1px 2px #fff3e0,
+      0 2px 4px #ffd180,
+      0 3px 8px #ffab40,
+      0 0 15px #ff9100;
+  }
+  100% {
+    text-shadow:
+      1px 1px 0 #ffb366,
+      2px 2px 0 #ff9933,
+      3px 3px 3px rgba(0,0,0,0.25);
+  }
+}
+
+/* --- Effet au survol : un peu plus de relief --- */
+.afriba-text:hover strong {
+  transform: scale(1.07);
+  transition: 0.3s ease;
+}
+
 
 /* --- FIN --- */
 

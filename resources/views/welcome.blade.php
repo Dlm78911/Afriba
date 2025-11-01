@@ -136,72 +136,66 @@
 
             <!-- Barre de recherche -->
 
-           <div class="header-center">
-    <div class="search-bar">
-        <input type="text" placeholder="Que cherchez-vous ?" id="searchInput">
-        <button id="searchToggle"><i class="fas fa-search"></i></button>
+            <div class="header-center">
+                <div class="search-bar">
+                    <input type="text" placeholder="Que cherchez-vous ?" id="searchInput">
+                    <button id="searchToggle"><i class="fas fa-search"></i></button>
 
-        <!-- Dropdown recherche -->
-        <div class="search-dropdown" id="searchMenu">
-            <div class="search-section">
-                <strong>Recherches récentes</strong>
-                <ul>
-                    <li>Robe africaine</li>
-                    <li>Boubou homme</li>
-                    <li>Bijoux artisanaux</li>
-                </ul>
+                    <!-- Dropdown recherche -->
+                    <div class="search-dropdown" id="searchMenu">
+                        <div class="search-section">
+                            <strong>Recherches récentes</strong>
+                            <ul>
+                                <li>Robe africaine</li>
+                                <li>Boubou homme</li>
+                                <li>Bijoux artisanaux</li>
+                            </ul>
+                        </div>
+                        <div class="search-section">
+                            <strong>Suggestions populaires</strong>
+                            <ul>
+                                <li>Chaussures traditionnelles</li>
+                                <li>Paniers en osier</li>
+                                <li>Tissus Wax</li>
+                            </ul>
+                        </div>
+                        <a href="#" class="advanced-search">Recherche avancée</a>
+                    </div>
+                </div>
             </div>
-            <div class="search-section">
-                <strong>Suggestions populaires</strong>
-                <ul>
-                    <li>Chaussures traditionnelles</li>
-                    <li>Paniers en osier</li>
-                    <li>Tissus Wax</li>
-                </ul>
-            </div>
-            <a href="#" class="advanced-search">Recherche avancée</a>
-        </div>
-    </div>
-</div>
-<script>
-    const searchInput = document.getElementById('searchInput');
-const searchMenu = document.getElementById('searchMenu');
-const searchBar = document.querySelector('.search-bar');
-const searchButton = document.getElementById('searchToggle');
-
-// Clic sur l'input → ouvre dropdown
-searchInput.addEventListener('click', (e) => {
-  e.stopPropagation(); // empêche la fermeture immédiate
-  searchMenu.classList.add('show');
-});
-
-// Empêche que cliquer dans le dropdown le ferme
-searchMenu.addEventListener('click', (e) => {
-  e.stopPropagation();
-});
-
-// Clic n'importe où ailleurs → fermer dropdown
-document.addEventListener('click', () => {
-  searchMenu.classList.remove('show');
-});
-
-// Bouton recherche → ne touche pas au dropdown
-searchButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  console.log("Recherche lancée :", searchInput.value);
-});
-
-// Scroll effect pour navbar
-window.addEventListener('scroll', () => {
-  const navbar = document.querySelector('.navbar');
-  if (window.scrollY > 20) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
-});
-
-</script>
+            <script>
+                const searchInput = document.getElementById('searchInput');
+                const searchMenu = document.getElementById('searchMenu');
+                const searchBar = document.querySelector('.search-bar');
+                const searchButton = document.getElementById('searchToggle');
+                // Clic sur l'input → ouvre dropdown
+                searchInput.addEventListener('click', (e) => {
+                    e.stopPropagation(); // empêche la fermeture immédiate
+                    searchMenu.classList.add('show');
+                });
+                // Empêche que cliquer dans le dropdown le ferme
+                searchMenu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+                // Clic n'importe où ailleurs → fermer dropdown
+                document.addEventListener('click', () => {
+                    searchMenu.classList.remove('show');
+                });
+                // Bouton recherche → ne touche pas au dropdown
+                searchButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log("Recherche lancée :", searchInput.value);
+                });
+                // Scroll effect pour navbar
+                window.addEventListener('scroll', () => {
+                    const navbar = document.querySelector('.navbar');
+                    if (window.scrollY > 20) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                });
+            </script>
 
             <!-- Icônes à droite -->
             <div class="header-right">
@@ -474,69 +468,62 @@ window.addEventListener('scroll', () => {
                     </div>
                     @endif
                 </div>
-               <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const connexionToggle = document.getElementById("connexionToggle");
-    const connexionMenu = document.getElementById("connexionMenu");
-    const userToggle = document.getElementById("userToggle");
-    const userMenu = document.getElementById("userMenu");
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const connexionToggle = document.getElementById("connexionToggle");
+                        const connexionMenu = document.getElementById("connexionMenu");
+                        const userToggle = document.getElementById("userToggle");
+                        const userMenu = document.getElementById("userMenu");
 
-    function closeAllMenus(exceptMenu = null) {
-        [connexionMenu, userMenu].forEach(menu => {
-            if (menu && menu !== exceptMenu) menu.classList.remove("show");
-        });
-    }
-
-    if (connexionToggle && connexionMenu) {
-        connexionToggle.addEventListener("click", function(e) {
-            e.stopPropagation();
-            closeAllMenus(connexionMenu);
-            connexionMenu.classList.toggle("show");
-        });
-    }
-
-    if (userToggle && userMenu) {
-        userToggle.addEventListener("click", function(e) {
-            e.stopPropagation();
-            closeAllMenus(userMenu);
-            userMenu.classList.toggle("show");
-        });
-    }
-
-    if (connexionMenu) connexionMenu.addEventListener("click", e => e.stopPropagation());
-    if (userMenu) userMenu.addEventListener("click", e => e.stopPropagation());
-    document.addEventListener("click", () => closeAllMenus());
-
-    // --- Salutation dynamique (uniquement si utilisateur connecté) ---
-    @if(session()->has('afriba_user'))
-        const salutationText = document.getElementById("salutationText");
-        const flag = document.getElementById("countryFlag");
-        const now = new Date();
-        const hour = now.getHours();
-        let greeting = "";
-
-        if (hour >= 5 && hour < 12) {
-            greeting = "Bonjour";
-        } else if (hour >= 12 && hour < 18) {
-            greeting = "Bon après-midi";
-        } else {
-            greeting = "Bonsoir";
-        }
-
-        // Nom complet entier
-        const userName = "{{ session('afriba_user')->nom_complet ?? session('afriba_user')->nom ?? 'Utilisateur' }}";
-
-        if (salutationText) {
-            salutationText.textContent = `${greeting}, ${userName}`;
-        }
-
-        const userCountry = "{{ strtolower(session('afriba_user')->pays ?? 'CI') }}";
-        if (flag) {
-            flag.src = `https://flagcdn.com/w20/${userCountry}.png`;
-        }
-    @endif
-});
-</script>
+                        function closeAllMenus(exceptMenu = null) {
+                            [connexionMenu, userMenu].forEach(menu => {
+                                if (menu && menu !== exceptMenu) menu.classList.remove("show");
+                            });
+                        }
+                        if (connexionToggle && connexionMenu) {
+                            connexionToggle.addEventListener("click", function(e) {
+                                e.stopPropagation();
+                                closeAllMenus(connexionMenu);
+                                connexionMenu.classList.toggle("show");
+                            });
+                        }
+                        if (userToggle && userMenu) {
+                            userToggle.addEventListener("click", function(e) {
+                                e.stopPropagation();
+                                closeAllMenus(userMenu);
+                                userMenu.classList.toggle("show");
+                            });
+                        }
+                        if (connexionMenu) connexionMenu.addEventListener("click", e => e.stopPropagation());
+                        if (userMenu) userMenu.addEventListener("click", e => e.stopPropagation());
+                        document.addEventListener("click", () => closeAllMenus());
+                        // --- Salutation dynamique (uniquement si utilisateur connecté) ---
+                        @if(session()->has('afriba_user'))
+                        const salutationText = document.getElementById("salutationText");
+                        const flag = document.getElementById("countryFlag");
+                        const now = new Date();
+                        const hour = now.getHours();
+                        let greeting = "";
+                        if (hour >= 5 && hour < 12) {
+                            greeting = "Bonjour";
+                        } else if (hour >= 12 && hour < 18) {
+                            greeting = "Bon après-midi";
+                        } else {
+                            greeting = "Bonsoir";
+                        }
+                        // Nom complet entier
+                        const userName =
+                            "{{ session('afriba_user')->nom_complet ?? session('afriba_user')->nom ?? 'Utilisateur' }}";
+                        if (salutationText) {
+                            salutationText.textContent = `${greeting}, ${userName}`;
+                        }
+                        const userCountry = "{{ strtolower(session('afriba_user')->pays ?? 'CI') }}";
+                        if (flag) {
+                            flag.src = `https://flagcdn.com/w20/${userCountry}.png`;
+                        }
+                        @endif
+                    });
+                </script>
 
             </div>
         </div>
@@ -628,7 +615,7 @@ document.addEventListener("DOMContentLoaded", function() {
     </section>
 
     <div class="welcome-banner">
-        <span>Bienvenue sur <strong>Afriba</strong></span>
+        <span class="afriba-text">Bienvenue sur <strong>Afriba</strong></span>
     </div>
 
     <!-- 🌟 Section mise en avant -->
