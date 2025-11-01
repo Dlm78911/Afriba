@@ -1015,6 +1015,17 @@ body {
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(255,123,0,0.25);
 }
+/* --- Bandeau de bienvenue (salutation dans le dropdown) --- */
+.dropdown-header {
+  background: #fff7f0;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #444;
+  display: flex;
+  align-items: center;
+}
 
 
 

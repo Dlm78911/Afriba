@@ -394,10 +394,26 @@
                     </button>
 
                     <!-- Menu utilisateur connecté -->
+                    <!-- Bouton utilisateur connecté -->
+                    <!-- Menu utilisateur connecté -->
                     <div class="connexion-dropdown" id="userMenu">
+                        @if(session()->has('afriba_user'))
+                        <div class="dropdown-header" style="display:flex;align-items:center;gap:8px;">
+                            <span id="salutationText"></span>
+                            <img id="countryFlag" src="" alt="Pays"
+                                style="width:22px;height:15px;border-radius:3px;margin-left:8px;">
+                        </div>
+                        @endif
+
                         <a href="/profile"><i class="fa fa-user-circle"></i> Mon profil</a>
-                        <a href="/logout"><i class="fa fa-sign-out-alt"></i> Déconnexion</a>
+                        <a href="/orders"><i class="fa fa-box"></i> Commandes</a>
+                        <a href="/messages"><i class="fa fa-envelope"></i> Messages</a>
+                        <a href="/devis"><i class="fa fa-file-invoice"></i> Demandes de devis</a>
+                        <a href="/favoris"><i class="fa fa-heart"></i> Favoris</a>
+                        <a href="/settings"><i class="fa fa-cog"></i> Compte</a>
+                        <a href="/logout" style="color:red;"><i class="fa fa-sign-out-alt"></i> Déconnexion</a>
                     </div>
+
                     @else
                     <!-- Utilisateur non connecté -->
                     <button class="btn-connexion" id="connexionToggle">
@@ -419,7 +435,6 @@
                     </div>
                     @endif
                 </div>
-
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
                         const connexionToggle = document.getElementById("connexionToggle");
@@ -433,7 +448,7 @@
                             });
                         }
                         // Menu connexion (non connecté)
-                        if (connexionToggle) {
+                        if (connexionToggle && connexionMenu) {
                             connexionToggle.addEventListener("click", function(e) {
                                 e.stopPropagation();
                                 closeAllMenus(connexionMenu);
@@ -441,7 +456,7 @@
                             });
                         }
                         // Menu utilisateur connecté
-                        if (userToggle) {
+                        if (userToggle && userMenu) {
                             userToggle.addEventListener("click", function(e) {
                                 e.stopPropagation();
                                 closeAllMenus(userMenu);
@@ -453,6 +468,30 @@
                         if (userMenu) userMenu.addEventListener("click", e => e.stopPropagation());
                         // Fermer les menus si clic en dehors
                         document.addEventListener("click", () => closeAllMenus());
+                        // --- Salutation dynamique (uniquement si utilisateur connecté) ---
+                        @if(session() - > has('afriba_user'))
+                        const salutationText = document.getElementById("salutationText");
+                        const flag = document.getElementById("countryFlag");
+                        const now = new Date();
+                        const hour = now.getHours();
+                        let greeting = "";
+                        if (hour >= 5 && hour < 12) {
+                            greeting = "Bonjour";
+                        } else if (hour >= 12 && hour < 18) {
+                            greeting = "Bon après-midi";
+                        } else {
+                            greeting = "Bonsoir";
+                        }
+                        const userName =
+                            "{{ explode(' ', session('afriba_user')->nom_complet ?? session('afriba_user')->nom ?? 'Utilisateur')[0] }}";
+                        if (salutationText) {
+                            salutationText.textContent = `${greeting}, ${userName}`;
+                        }
+                        const userCountry = "{{ strtolower(session('afriba_user')->pays ?? 'CI') }}";
+                        if (flag) {
+                            flag.src = `https://flagcdn.com/w20/${userCountry}.png`;
+                        }
+                        @endif
                     });
                 </script>
 
