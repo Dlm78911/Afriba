@@ -88,51 +88,79 @@
                 </div>
             </div>
 
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    // Ouvrir/fermer le menu drapeau
-                    const headerFlag = document.getElementById("flagToggle");
-                    headerFlag.addEventListener("click", function(e) {
-                        e.preventDefault();
-                        headerFlag.classList.toggle("open");
-                    });
-                    document.addEventListener("click", function(e) {
-                        if (!headerFlag.contains(e.target)) {
-                            headerFlag.classList.remove("open");
-                        }
-                    });
-                    // Dropdown pour chaque custom-select
-                    document.querySelectorAll(".custom-select").forEach(select => {
-                        const selected = select.querySelector(".selected");
-                        const options = select.querySelector(".options");
-                        // Toggle open au clic sur la zone selected
-                        selected.addEventListener("click", e => {
-                            e.stopPropagation(); // éviter propagation au document
-                            // fermer les autres selects
-                            document.querySelectorAll(".custom-select").forEach(s => {
-                                if (s !== select) s.classList.remove("open");
-                            });
-                            select.classList.toggle("open");
-                        });
-                        // Cliquer sur une option
-                        options.querySelectorAll(".option").forEach(opt => {
-                            opt.addEventListener("click", e => {
-                                e.stopPropagation();
-                                const text = opt.querySelector("span") ? opt
-                                    .querySelector("span").textContent : opt
-                                    .textContent;
-                                select.querySelector(".text").textContent = text.trim();
-                                select.classList.remove("open");
-                            });
-                        });
-                    });
-                    // Fermer tous les selects si clic extérieur
-                    document.addEventListener("click", () => {
-                        document.querySelectorAll(".custom-select").forEach(s => s.classList.remove(
-                            "open"));
-                    });
-                });
-            </script>
+           <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const headerFlag = document.getElementById("flagToggle");
+    const flagMenu = document.getElementById("flagMenu");
+
+    // Ouvrir/fermer le menu parent
+    headerFlag.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // très important pour ne pas fermer immédiatement
+        headerFlag.classList.toggle("open");
+        flagMenu.style.display = headerFlag.classList.contains("open") ? "block" : "none";
+    });
+
+    // Fermer menu si clic à l'extérieur
+    document.addEventListener("click", () => {
+        headerFlag.classList.remove("open");
+        flagMenu.style.display = "none";
+        document.querySelectorAll(".custom-select").forEach(s => s.classList.remove("open"));
+        document.querySelectorAll(".custom-select .options").forEach(o => o.style.display = "none");
+    });
+
+    // ======== Custom Selects ========
+    document.querySelectorAll(".custom-select").forEach(select => {
+        const selected = select.querySelector(".selected");
+        const options = select.querySelector(".options");
+
+        // Clic sur selected → ouvre menu interne
+        selected.addEventListener("click", (e) => {
+            e.stopPropagation(); // bloque fermeture menu parent
+            // fermer les autres menus internes
+            document.querySelectorAll(".custom-select").forEach(s => {
+                if (s !== select) {
+                    s.classList.remove("open");
+                    const opts = s.querySelector(".options");
+                    if (opts) opts.style.display = "none";
+                }
+            });
+            select.classList.toggle("open");
+            options.style.display = select.classList.contains("open") ? "block" : "none";
+        });
+
+        // Clic sur option
+        options.querySelectorAll("div").forEach(option => {
+            option.addEventListener("click", (e) => {
+                e.stopPropagation();
+
+                // --- Si c'est Pays ---
+                if (select.previousElementSibling && select.previousElementSibling.textContent.trim() === "Pays") {
+                    const img = option.querySelector("img");
+                    const text = option.textContent.trim();
+                    selected.innerHTML = `
+                        <img src="${img.src}" alt="">
+                        <span class="text">${text}</span>
+                        <span class="arrow"></span>
+                    `;
+                } 
+                // Langue / Devise
+                else {
+                    const textContainer = selected.querySelector(".text");
+                    textContainer.textContent = option.textContent.trim();
+                }
+
+                // Fermer le menu interne après sélection
+                select.classList.remove("open");
+                options.style.display = "none";
+            });
+        });
+    });
+
+});
+</script>
+
 
             <!-- Barre de recherche -->
 
@@ -1802,6 +1830,14 @@
 
         </div>
     </div>
+
+<div class="feedback-section">
+    <div class="feedback-content">
+        <h2>Nous serions ravis de savoir ce que vous en pensez&nbsp;!</h2>
+        <button class="feedback-button">Donner son avis</button>
+    </div>
+</div>
+
 
     <footer class="main-footer">
         <!-- ======= Section ENGAGEMENTS ======= -->
