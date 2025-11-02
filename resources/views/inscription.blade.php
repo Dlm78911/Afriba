@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Afriba — Inscription / Connexion</title>
     <style>
         :root {
@@ -699,12 +699,14 @@
                 );
                 try {
                     const response = await fetch(authForm.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    });
+    method: 'POST',
+    body: formData,
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+    }
+});
+
                     const data = await response.json();
                     if (data.success) {
                         successMessage.textContent = "🎉 Inscription réussie !";

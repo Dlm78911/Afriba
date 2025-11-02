@@ -366,62 +366,72 @@
   </div>
 
   <div id="toast" class="toast"></div>
-
   <script>
-    // === TOAST MESSAGE (toujours visible au-dessus) ===
-    const toast = document.getElementById('toast');
+  // === TOAST MESSAGE (toujours visible au-dessus) ===
+  const toast = document.getElementById('toast');
 
-    function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // === Sélection Réseaux sociaux (toggle) ===
+  const socialBtns = document.querySelectorAll('.social-btn');
+  socialBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('checked')) {
+        btn.classList.remove('checked');
+      } else {
+        socialBtns.forEach(b => b.classList.remove('checked'));
+        btn.classList.add('checked');
+      }
+    });
+  });
+
+  // === Soumission du formulaire ===
+  const loginForm = document.getElementById('loginForm');
+  loginForm.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const formData = new FormData(loginForm);
+    const login = formData.get('login').trim();
+    const password = formData.get('password').trim();
+
+    if (!login || !password) {
+      showToast("Merci de remplir tous les champs");
+      return;
     }
-    // === Sélection Réseaux sociaux (toggle) ===
-    const socialBtns = document.querySelectorAll('.social-btn');
-    socialBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // si déjà sélectionné, on désactive
-        if (btn.classList.contains('checked')) {
-          btn.classList.remove('checked');
-        } else {
-          socialBtns.forEach(b => b.classList.remove('checked'));
-          btn.classList.add('checked');
-        }
+
+    try {
+      const response = await fetch(loginForm.action, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+        },
+        body: formData
       });
-    });
-    // === Soumission du formulaire ===
-    const loginForm = document.getElementById('loginForm');
-    loginForm.addEventListener('submit', async e => {
-      e.preventDefault();
-      const formData = new FormData(loginForm);
-      const login = formData.get('login').trim();
-      const password = formData.get('password').trim();
-      const social = document.querySelector('.social-btn.checked');
-      if (!login || !password) {
-        showToast("Merci de remplir tous les champs");
-        return;
+
+      const data = await response.json();
+
+      if (data.success) {
+        showToast(data.message);
+        setTimeout(() => {
+          if (data.redirect) {
+            window.location.href = data.redirect;
+          }
+        }, 1500);
+      } else {
+        showToast(data.message || "Identifiants incorrects");
       }
-      // Simulation d’envoi (ou fetch Laravel)
-      try {
-        const response = await fetch(loginForm.action, {
-          method: 'POST',
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          body: formData
-        });
-        const data = await response.json();
-        if (data.success) {
-          showToast(data.message);
-          setTimeout(() => window.location.href = data.redirect, 1500);
-        } else {
-          showToast(data.message || "Identifiants incorrects");
-        }
-      } catch {
-        showToast("Impossible de se connecter au serveur");
-      }
-    });
-  </script>
+    } catch (error) {
+      console.error(error);
+      showToast("Impossible de se connecter au serveur");
+    }
+  });
+</script>
+
 </body>
 
 </html>
