@@ -88,79 +88,77 @@
                 </div>
             </div>
 
-           <script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    const headerFlag = document.getElementById("flagToggle");
-    const flagMenu = document.getElementById("flagMenu");
-
-    // Ouvrir/fermer le menu parent
-    headerFlag.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation(); // très important pour ne pas fermer immédiatement
-        headerFlag.classList.toggle("open");
-        flagMenu.style.display = headerFlag.classList.contains("open") ? "block" : "none";
-    });
-
-    // Fermer menu si clic à l'extérieur
-    document.addEventListener("click", () => {
-        headerFlag.classList.remove("open");
-        flagMenu.style.display = "none";
-        document.querySelectorAll(".custom-select").forEach(s => s.classList.remove("open"));
-        document.querySelectorAll(".custom-select .options").forEach(o => o.style.display = "none");
-    });
-
-    // ======== Custom Selects ========
-    document.querySelectorAll(".custom-select").forEach(select => {
-        const selected = select.querySelector(".selected");
-        const options = select.querySelector(".options");
-
-        // Clic sur selected → ouvre menu interne
-        selected.addEventListener("click", (e) => {
-            e.stopPropagation(); // bloque fermeture menu parent
-            // fermer les autres menus internes
-            document.querySelectorAll(".custom-select").forEach(s => {
-                if (s !== select) {
-                    s.classList.remove("open");
-                    const opts = s.querySelector(".options");
-                    if (opts) opts.style.display = "none";
-                }
-            });
-            select.classList.toggle("open");
-            options.style.display = select.classList.contains("open") ? "block" : "none";
-        });
-
-        // Clic sur option
-        options.querySelectorAll("div").forEach(option => {
-            option.addEventListener("click", (e) => {
-                e.stopPropagation();
-
-                // --- Si c'est Pays ---
-                if (select.previousElementSibling && select.previousElementSibling.textContent.trim() === "Pays") {
-                    const img = option.querySelector("img");
-                    const text = option.textContent.trim();
-                    selected.innerHTML = `
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const headerFlag = document.getElementById("flagToggle");
+                    const flagMenu = document.getElementById("flagMenu");
+                    // Ouvrir/fermer le menu parent
+                    headerFlag.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        e.stopPropagation(); // très important pour ne pas fermer immédiatement
+                        headerFlag.classList.toggle("open");
+                        flagMenu.style.display = headerFlag.classList.contains("open") ? "block" :
+                            "none";
+                    });
+                    // Fermer menu si clic à l'extérieur
+                    document.addEventListener("click", () => {
+                        headerFlag.classList.remove("open");
+                        flagMenu.style.display = "none";
+                        document.querySelectorAll(".custom-select").forEach(s => s.classList.remove(
+                            "open"));
+                        document.querySelectorAll(".custom-select .options").forEach(o => o.style
+                            .display = "none");
+                    });
+                    // ======== Custom Selects ========
+                    document.querySelectorAll(".custom-select").forEach(select => {
+                        const selected = select.querySelector(".selected");
+                        const options = select.querySelector(".options");
+                        // Clic sur selected → ouvre menu interne
+                        selected.addEventListener("click", (e) => {
+                            e.stopPropagation(); // bloque fermeture menu parent
+                            // fermer les autres menus internes
+                            document.querySelectorAll(".custom-select").forEach(s => {
+                                if (s !== select) {
+                                    s.classList.remove("open");
+                                    const opts = s.querySelector(".options");
+                                    if (opts) opts.style.display = "none";
+                                }
+                            });
+                            select.classList.toggle("open");
+                            options.style.display = select.classList.contains("open") ?
+                                "block" : "none";
+                        });
+                        // Clic sur option
+                        options.querySelectorAll("div").forEach(option => {
+                            option.addEventListener("click", (e) => {
+                                e.stopPropagation();
+                                // --- Si c'est Pays ---
+                                if (select.previousElementSibling && select
+                                    .previousElementSibling.textContent.trim() ===
+                                    "Pays") {
+                                    const img = option.querySelector("img");
+                                    const text = option.textContent.trim();
+                                    selected.innerHTML = `
                         <img src="${img.src}" alt="">
                         <span class="text">${text}</span>
                         <span class="arrow"></span>
                     `;
-                } 
-                // Langue / Devise
-                else {
-                    const textContainer = selected.querySelector(".text");
-                    textContainer.textContent = option.textContent.trim();
-                }
-
-                // Fermer le menu interne après sélection
-                select.classList.remove("open");
-                options.style.display = "none";
-            });
-        });
-    });
-
-});
-</script>
-
+                                }
+                                // Langue / Devise
+                                else {
+                                    const textContainer = selected.querySelector(
+                                        ".text");
+                                    textContainer.textContent = option.textContent
+                                    .trim();
+                                }
+                                // Fermer le menu interne après sélection
+                                select.classList.remove("open");
+                                options.style.display = "none";
+                            });
+                        });
+                    });
+                });
+            </script>
 
             <!-- Barre de recherche -->
 
@@ -466,12 +464,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         </div>
                         @endif
 
-                        <a href="/profile"><i class="fa fa-user-circle"></i> Mon profil</a>
+                        <a href="/profile"><i class="fa fa-user-circle"></i> Mon Compte</a>
                         <a href="/orders"><i class="fa fa-box"></i> Commandes</a>
                         <a href="/messages"><i class="fa fa-envelope"></i> Messages</a>
                         <a href="/devis"><i class="fa fa-file-invoice"></i> Demandes de devis</a>
                         <a href="/favoris"><i class="fa fa-heart"></i> Favoris</a>
-                        <a href="/settings"><i class="fa fa-cog"></i> Compte</a>
                         <a href="/logout" style="color:red;"><i class="fa fa-sign-out-alt"></i> Déconnexion</a>
                     </div>
 
@@ -526,7 +523,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (userMenu) userMenu.addEventListener("click", e => e.stopPropagation());
                         document.addEventListener("click", () => closeAllMenus());
                         // --- Salutation dynamique (uniquement si utilisateur connecté) ---
-                        @if(session()->has('afriba_user'))
+                        @if(session()-> has('afriba_user'))
                         const salutationText = document.getElementById("salutationText");
                         const flag = document.getElementById("countryFlag");
                         const now = new Date();
@@ -627,7 +624,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <span class="label">Produits</span>
                 </div>
                 <div class="stat">
-                    <span class="number">0</span>
+                    <span class="number" id="vendeurs-count">0</span>
                     <span class="label">Vendeurs africains</span>
                 </div>
                 <div class="stat">
@@ -635,10 +632,147 @@ document.addEventListener("DOMContentLoaded", function() {
                     <span class="label">Catégories</span>
                 </div>
                 <div class="stat">
-                    <span class="number">0</span>
+                    <span class="number" id="pays-count">0</span>
                     <span class="label">Pays africains</span>
                 </div>
             </div>
+            <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const vendeursCountEl = document.getElementById('vendeurs-count');
+    const paysCountEl = document.getElementById('pays-count');
+    const authForm = document.getElementById('authForm');
+    const toast = document.getElementById('toast');
+    const successMessage = document.getElementById('successMessage');
+    let paysSelected = "";
+
+    // Fonction pour afficher un toast
+    function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // 🔹 Charger les stats depuis /stats
+    async function loadStats() {
+        try {
+            const res = await fetch("{{ route('stats') }}");
+            const data = await res.json();
+            vendeursCountEl.textContent = data.vendeurs;
+            paysCountEl.textContent = data.pays;
+        } catch (err) {
+            console.error("Impossible de charger les stats", err);
+        }
+    }
+
+    // Charger les stats au chargement
+    loadStats();
+
+    // =========================
+    // Gestion de la sélection du pays
+    // =========================
+    const customSelect = document.querySelector('.custom-select');
+    const selected = customSelect.querySelector('.selected');
+    const optionsList = customSelect.querySelector('.options');
+
+    customSelect.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = optionsList.style.display === 'block';
+        document.querySelectorAll('.options').forEach(opt => opt.style.display = 'none');
+        optionsList.style.display = isOpen ? 'none' : 'block';
+    });
+
+    optionsList.querySelectorAll('li').forEach(option => {
+        option.addEventListener('click', e => {
+            e.stopPropagation();
+            const flag = option.querySelector("img").src;
+            const text = option.textContent.trim();
+            selected.innerHTML = `<img src="${flag}" alt="flag"/> ${text}`;
+            paysSelected = option.dataset.code;
+            optionsList.style.display = 'none';
+        });
+    });
+
+    document.addEventListener('click', () => {
+        optionsList.style.display = 'none';
+    });
+
+    // =========================
+    // Formulaire d'inscription
+    // =========================
+    authForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(authForm);
+        const fullname = formData.get('fullname').trim();
+        const phone = formData.get('phone').trim();
+        const ville = formData.get('ville').trim();
+        const commune = formData.get('commune').trim();
+        const password = formData.get('password');
+        const confirm = formData.get('password_confirmation');
+        const socialSelected = document.querySelector('.social-btn.checked');
+
+        if (!fullname || !phone || !ville || !commune || !password) {
+            showToast("Merci de remplir tous les champs");
+            return;
+        }
+
+        if (password !== confirm) {
+            showToast("Mots de passe différents");
+            return;
+        }
+
+        if (!paysSelected) {
+            showToast("Veuillez sélectionner un pays");
+            return;
+        }
+
+        if (!socialSelected) {
+            showToast("Veuillez sélectionner un mode de connexion sociale");
+            return;
+        }
+
+        formData.append('pays', paysSelected);
+        formData.append('social',
+            socialSelected.classList.contains('google') ? 'google' :
+            socialSelected.classList.contains('facebook') ? 'facebook' :
+            'linkedin'
+        );
+
+        try {
+            const response = await fetch(authForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // ✅ Mettre à jour les compteurs immédiatement
+                loadStats();
+
+                // Message succès
+                successMessage.textContent = "🎉 Inscription réussie !";
+                successMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2500);
+            } else {
+                showToast(data.message || "Une erreur est survenue");
+            }
+        } catch (err) {
+            showToast("Impossible de se connecter au serveur");
+        }
+    });
+
+});
+</script>
+
 
     </section>
 
@@ -1249,10 +1383,435 @@ document.addEventListener("DOMContentLoaded", function() {
                 </a>
             </div>
 
+
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+
+                    <!-- Image principale -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyd9jzlxWx-wNjLWtTIcDDdX3-8tRQ61Efpg&s"
+                        alt="T-shirt Nommade" class="primary">
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW_GZkaBf95FQthIuO_oFH6T0eRsgjNav_Ba0I9YmkjZ8U0DU55wbwmPEwhjXd179F5l4&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">T-shirt Nommade</div>
+                            <div class="product-description">Confection locale • 100% coton</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 20 pièces</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 3 500 – 5 000 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle white"></span>
+                            <span class="color-circle black"></span>
+                            <span class="color-circle navy"></span>
+                            <div class="color-number-standalone">12</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>5 000 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+                    <img src="https://sanlishop.ci/8993-home_default/croustilles-de-feves-de-cacao-125g.jpg"
+                        alt="Cacao brut" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://sanlishop.ci/8990-large_default/croustilles-de-feves-de-cacao-250g.jpg"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Fèves de Cacao</div>
+                            <div class="product-description">Origine Côte d’Ivoire • Qualité premium</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 10 kg</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 1 500 – 3 000 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle brown"></span>
+                            <span class="color-circle darkred"></span>
+                            <span class="color-circle beige"></span>
+                            <div class="color-number-standalone">12</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>3 000 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/et.png" alt="ET" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx6aTZL2zdenMwGGS_L02DDCt9rISs8A4yqBvSulM50kuROTvBjewPdj2Yqf3x7EtVdbc&usqp=CAU"
+                        alt="Café éthiopien" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://www.lecafeier.fr/wp-content/uploads/2022/03/cafe_pureoriginebio_ethiopie_moka_jebena_buna.jpg"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Café Arabica</div>
+                            <div class="product-description">Grains torréfiés • Origine Éthiopie</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 3 kg</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 4 000 – 6 500 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle black"></span>
+                            <span class="color-circle brown"></span>
+                            <span class="color-circle gray"></span>
+                            <div class="color-number-standalone">6</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>6 500 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/gh.png" alt="GH" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShpFpVGkW-nL-rEtGvxGF9ZMDnCnWNhFSlSCA4moWStPmjit30yC7-jDE0-RhVjNJ_8oY&usqp=CAU"
+                        alt="Tissu wax africain" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFwkidb2fny4Nqu8JRhynOuQNn91m8N2XOz9LChvlwgjqlab5FIONOtMABgCEEXyKZyEI&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Tissu Wax Africain</div>
+                            <div class="product-description">100% coton • Couleurs éclatantes</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 2 pièces</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 5 000 – 12 000 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle red"></span>
+                            <span class="color-circle yellow"></span>
+                            <span class="color-circle blue"></span>
+                            <div class="color-number-standalone">15</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>12 000 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHXOxIWkuf4FCC8IzW1klPZEzkMSn1nrSXWnXGe93gy_-EMuO1sDzqqj4-Q7wp5krtix4&usqp=CAU"
+                        alt="Attiéké ivoirien" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNYaDITXC2q3GGT-7AIim8t0F_3F7HxKC3-TtttecQHtnyqHWdWjnvWgSofKBD5-bY0Y8&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Attiéké Traditionnel</div>
+                            <div class="product-description">Semoule de manioc • Plat typique</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 5 kg</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 1 000 – 2 500 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle beige"></span>
+                            <span class="color-circle yellow"></span>
+                            <span class="color-circle brown"></span>
+                            <div class="color-number-standalone">5</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>2 500 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwANXN5rOnLb_XF7XEu2k6JnaWsi3CLtGIdcOWTTON4LvcHSQTaNp0YcxFtT4kzgf_lP0&usqp=CAU"
+                        alt="Riz ivoirien" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4TjDuYkvlg0IYM2tXnkbewc8X4DLs09cB_XlJVm4PgZA8iTaCNskU3Myz97WFXMbrt54&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Riz Local</div>
+                            <div class="product-description">Riz blanc non parfumé • Origine CI</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 25 kg</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 10 000 – 12 500 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle white"></span>
+                            <span class="color-circle beige"></span>
+                            <span class="color-circle brown"></span>
+                            <div class="color-number-standalone">6</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>12 500 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+                    <img src="https://grandexotique.com/cdn/shop/files/IMG_6790.heic?v=1749022466&width=1946"
+                        alt="Huile de palme rouge" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZEYhvwapVJQfcjnz5XFZq3syouD451qPEpWrhP5EagGds2xJzMkhDpX9ipn6HrH5Lh-g&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Huile de Palme Rouge</div>
+                            <div class="product-description">Pressée à froid • Qualité locale</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 5 L</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 3 000 – 5 000 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle red"></span>
+                            <span class="color-circle orange"></span>
+                            <span class="color-circle brown"></span>
+                            <div class="color-number-standalone">4</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>5 000 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8TCe5urX_opitXGeBcQgSu6PR6Gvfo_rkvALbLg-ImKBDJNxA2XPkcs_PyhC8Ni7vgRs&usqp=CAU"
+                        alt="Noix de cajou" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB9pLE-Mgu1X54gNUyHKqNkXdSZGDxQQ6L8V0NCJxYc7h-G2Py1vIBvkPYK3tncRdwV70&usqp=CAU"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Noix de Cajou</div>
+                            <div class="product-description">Grillées • Origine Côte d’Ivoire</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 10 kg</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 6 000 – 8 000 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle beige"></span>
+                            <span class="color-circle brown"></span>
+                            <span class="color-circle yellow"></span>
+                            <div class="color-number-standalone">9</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>8 000 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+                    <img src="https://s5q3y8p7.delivery.rocketcdn.me/wp-content/uploads/2018/12/00288-cacao-pur-en-poudre-bio-le-kilo-300x300.jpg"
+                        alt="Poudre de cacao" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://saldac.com/wp-content/uploads/2018/12/00289-cacao-sucre-en-poudre-bio-le-kilo-1200x900.jpg"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Poudre de Cacao</div>
+                            <div class="product-description">100% naturel • Non sucré</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 2 kg</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 4 500 – 7 000 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle brown"></span>
+                            <span class="color-circle darkred"></span>
+                            <span class="color-circle black"></span>
+                            <div class="color-number-standalone">8</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>7 000 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="trend-card">
+                <a href="#">
+                    <div class="country-icon">
+                        <img src="https://flagcdn.com/w40/ci.png" alt="CI" />
+                    </div>
+                    <div class="fav-btn">♡</div>
+
+                    <img src="https://image.made-in-china.com/202f0j00VRGUeHSgIhzp/Super-Quality-Mesh-Bag-Packing-Chinese-Yellow-Whole-Fresh-Ginger.webp"
+                        alt="Gingembre ivoirien" class="primary" />
+
+                    <!-- Image secondaire (au survol) -->
+                    <img src="https://image.made-in-china.com/2f0j00QvfiDKgCIIUa/New-Crop-Fresh-Ginger-for-Sale-Ginger-Root-Superior-Quality-From-China.webp"
+                        alt="T-shirt vue arrière" class="secondary">
+
+                    <div class="product-info">
+                        <div class="product-details">
+                            <div class="product-title">Gingembre Frais</div>
+                            <div class="product-description">Racine fraîche • Origine CI</div>
+                            <div class="product-extra">
+                                <div class="moq"><i class="fa-solid fa-boxes-stacked"></i> MOQ : 20 kg</div>
+                                <div class="price"><i class="fa-solid fa-tag"></i> 2 000 – 3 500 FCFA</div>
+                            </div>
+                        </div>
+                        <div class="add-to-cart">
+                            <i class="cart-icon">🛒</i>
+                        </div>
+                    </div>
+
+                    <div class="price-colors-container">
+                        <div class="color-options-vertical">
+                            <span class="color-circle beige"></span>
+                            <span class="color-circle yellow"></span>
+                            <span class="color-circle brown"></span>
+                            <div class="color-number-standalone">5</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-info">
+                        <div class="product-price"><i class="fa-solid fa-tag"></i>3 500 FCFA</div>
+                    </div>
+                </a>
+            </div>
+
             <div class="grid-container">
 
                 <div class="product-card">
-                    <img src="https://hdmag.net/wp-content/uploads/2019/03/okha-mobilier-design.jpg" alt="Puzzle"
+                    <img src="https://cdn.prod.website-files.com/6258429f68ebead7665d57ed/625d6b9665c4f71ce1488e38_Objets-et-d%C3%A9coration.jpg" alt="Puzzle"
                         class="image-placeholder">
                     <span class="prices"><i class="fa-solid fa-tag"></i>1 400 FCFA <s class="old-price">5 600
                             FCFA</s></span>
@@ -1312,6 +1871,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
 
             </div>
+
+
+
+
+
+            
             <a href="autre-page.html" class="afri-see-more">Vois plus</a>
 
         </div>
@@ -1831,13 +2396,12 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     </div>
 
-<div class="feedback-section">
-    <div class="feedback-content">
-        <h2>Nous serions ravis de savoir ce que vous en pensez&nbsp;!</h2>
-        <button class="feedback-button">Donner son avis</button>
+    <div class="feedback-section">
+        <div class="feedback-content">
+            <h2>Nous serions ravis de savoir ce que vous en pensez&nbsp;!</h2>
+            <button class="feedback-button">Donner son avis</button>
+        </div>
     </div>
-</div>
-
 
     <footer class="main-footer">
         <!-- ======= Section ENGAGEMENTS ======= -->
