@@ -2549,9 +2549,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         alt="Moov Money">
                     <img src="https://play-lh.googleusercontent.com/NgAdQMq9Mu2NTJredx6COxScVB3tp153h_bVKQTXUt9Aou0Lz1PfffaQt5jFN9jlBfo"
                         alt="Wave Money">
-                    <img src="https://img.freepik.com/free-vector/person-receiving-package-paying-delivery_23-2148773021.jpg?semt=ais_hybrid&w=740&q=80"
+                    <img src="https://cdn-icons-png.flaticon.com/128/1019/1019607.png"
                         alt="Cash à la livraison">
-                    <img src="https://p.kindpng.com/picc/s/613-6132525_illustration-hd-png-download.png"
+                    <img src="https://cdn-icons-png.flaticon.com/128/5790/5790705.png"
                         alt="Carte Bancaire">
                 </div>
             </div>
